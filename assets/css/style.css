@@ -193,6 +193,9 @@ pre.code .hl { color: #fbbf24; } pre.code .dim { color: #64748b; }
 .channel small { display: block; color: var(--muted); font-size: 12.5px; }
 .channel b { font-size: 15px; }
 .channel .go { color: var(--accent); font-weight: 800; }
+.mail-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+button.btn { font: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; }
+.detail .links-row { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); }
 .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; font-size: 13.5px; font-weight: 700; border: 1px solid var(--line); color: var(--text); background: var(--surface); }
 .btn:hover { text-decoration: none; border-color: var(--accent); }
 

@@ -77,3 +77,11 @@ if (reduce) {
     setTimeout(tick, 45);
   })();
 }
+
+// ---------- Copy email ----------
+const copyBtn = document.getElementById('copy-email');
+if (copyBtn) copyBtn.addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText(copyBtn.dataset.email); copyBtn.textContent = '복사됨 ✓'; }
+  catch { copyBtn.textContent = copyBtn.dataset.email; }
+  setTimeout(() => { copyBtn.textContent = '복사'; }, 1800);
+});
