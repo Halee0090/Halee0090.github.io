@@ -37,8 +37,6 @@ GitHub Pages로 배포하는 정적 포트폴리오 사이트입니다. 빌드 �
 
 ## 올리기 전에 바꿀 것 (`index.html`에서 `TODO` 검색)
 
-- [ ] Contact 탭: 이메일 `your.email@example.com`, GitHub `YOUR_GITHUB_ID`
-- [ ] Contact 탭 PDF 링크: 포트폴리오 PDF를 `assets/portfolio.pdf` 로 넣거나 해당 줄 삭제
 - [ ] (선택) WAF 적용 전/후 캡처를 `assets/img/waf-before.png`, `waf-after.png` 로 넣고 주석 해제
 
 탭은 주소로 바로 열 수 있습니다: `.../#project`, `.../#contact`
