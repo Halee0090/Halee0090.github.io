@@ -264,11 +264,11 @@
 
     <h3><span class="n">03</span>주요 작업</h3>
     <ol class="steps">
-      <li><b><span>1</span>EKS Cluster 구성</b><p>두 AZ의 Public·Private Subnet 4개에 클러스터를 연결하고, 인증 모드는 EKS API로 설정했습니다. API·Audit·Authenticator·Controller Manager·Scheduler 로그 5종을 CloudWatch로 수집하도록 했습니다.</p></li>
-      <li><b><span>2</span>Worker Node 구성</b><p>Managed Node Group으로 t3.medium 노드를 Private Subnet 2개에만 배치했습니다. 노드 수는 최소·기본 2개, 최대 10개로 지정했습니다. Launch Template으로 루트 디스크를 gp3 30GiB, EBS 암호화로 설정하고, EC2 인스턴스 Name 태그도 함께 지정했습니다.</p></li>
-      <li><b><span>3</span>Add-on 설치 순서 제어</b><p>네트워크 플러그인 없이 노드가 먼저 생성되면 Ready 상태가 되지 않기 때문에, depends_on으로 VPC CNI → Node Group → CoreDNS·kube-proxy 순서로 설치되도록 했습니다.</p></li>
-      <li><b><span>4</span>OIDC Provider 생성 및 모듈 연결</b><p>VPC 모듈의 Subnet ID와 IAM 모듈의 Cluster·Node Role ARN을 변수로 받아 클러스터를 생성했습니다. 클러스터의 OIDC Provider를 만들고, ARN을 output으로 내보내 IRSA 모듈에서 사용할 수 있게 했습니다.</p></li>
-      <li><b><span>5</span>배포 검증</b><p>fmt → validate → plan → apply 순서로 적용한 뒤, Cluster·Node Group·Add-on이 Active 상태인지 확인했습니다. Worker Node 2개가 서로 다른 AZ에 Public IP 없이 Ready 상태로 올라온 것도 확인했습니다.</p></li>
+      <li><b><span>1</span>Terraform 모듈 구조 설계</b><p>VPC / IAM / IRSA / EKS 컴포넌트를 독립 모듈로 나누어 설계하였습니다.</p></li>
+      <li><b><span>2</span>EKS Cluster 구성</b><p>Cluster용 IAM Role과 Node용 IAM Role을 생성하고, 두 AZ의 Public·Private Subnet 4개를 연결해 인증 모드는 EKS API로 설정했습니다.</p></li>
+      <li><b><span>3</span>Worker Node 구성 (Managed Node Group)</b><p>t3.medium 노드를 Private Subnet 2개에만 배치하였습니다. (최소·기본 2 / 최대 10)</p></li>
+      <li><b><span>4</span>Add-on 설치 순서 제어</b><p>네트워크 플러그인 없이 노드가 먼저 뜨지 않도록 VPC CNI → Node Group → CoreDNS·kube-proxy 순으로 depends_on을 설정했습니다.</p></li>
+      <li><b><span>5</span>배포 검증</b><p>fmt → validate → plan → apply 후 콘솔에서 VPC, IAM, EKS가 차례대로 생성됐는지 확인하고, EKS 클러스터에 연결해 Node와 Pod를 확인하였습니다.</p></li>
     </ol>
 
     <h3><span class="n">04</span>트러블슈팅</h3>
