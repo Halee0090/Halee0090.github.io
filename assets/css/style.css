@@ -78,7 +78,7 @@ code, .mono { font-family: "JetBrains Mono", Consolas, monospace; }
 /* ================= ABOUT ================= */
 .principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 .principle { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
-.principle .n { font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--accent); font-weight: 700; }
+.principle .n { font-family: inherit; font-size: 13px; color: var(--accent); font-weight: 700; }
 .principle h3 { font-size: 17px; margin: 8px 0 6px; }
 .principle p { margin: 0; font-size: 14.5px; color: var(--sub); }
 
