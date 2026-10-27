@@ -251,33 +251,38 @@
   </div>
   <div class="content">
     <h3><span class="n">01</span>프로젝트 소개</h3>
-    <p>클라우드 네이티브 환경에서 침해 경로를 탐지하는 프로젝트에서 사용할 AWS EKS 환경을 Terraform으로 구축하였습니다. 저는 <b>EKS 모듈</b>을 맡았고, VPC·IAM 모듈은 팀원들과 함께 작성했습니다.</p>
+    <p>클라우드 네이티브 환경에서 침해 경로를 탐지하는 <b>AWS CNAPP 프로젝트</b>에서, 탐지 대상이 되는 EKS 인프라를 Terraform으로 구축했습니다. 3명이 모듈 단위로 나눠 작업했고, 저는 <b>EKS 모듈</b>을 맡아 클러스터·노드·Add-on을 구성했습니다. VPC·IAM 모듈은 팀원들과 함께 작성했습니다.</p>
     <figure>
       <img src="assets/img/eks-architecture.png" alt="AWS EKS 인프라 구성도 · Terraform 모듈, VPC 2 AZ Public/Private Subnet, EKS Control Plane, Private Subnet의 Worker Node, IAM·IRSA, CloudWatch Logs" loading="lazy">
     </figure>
 
-    <h3><span class="n">02</span>배경과 목적</h3>
-    <dl class="kv">
-      <dt>배경</dt><dd>수업에서 배운 IaC를 실제 인프라에 적용하고 싶었고, 프로젝트 후반에 Terraform 코드의 보안 취약점을 배포 전에 점검하는 단계가 있어 인프라가 코드로 존재해야 했습니다.</dd>
-      <dt>목적</dt><dd>① 수업에서 배운 IaC를 실제 EKS 환경에 적용 ② 배포 전 보안 점검 대상으로 만들기 ③ 3명이 모듈 단위로 충돌 없이 분업</dd>
-    </dl>
+    <h3><span class="n">02</span>프로젝트 개요</h3>
+    <table class="compare ps">
+      <thead><tr><th>문제</th><th class="pick">해결</th></tr></thead>
+      <tbody>
+        <tr><td>프로젝트 후반에 배포 전 Terraform 코드 보안 점검 단계가 있음</td><td class="pick">인프라 전체를 코드로 관리하고 Region·Subnet ID 하드코딩 제거</td></tr>
+        <tr><td>3명이 같은 인프라 코드를 동시에 수정해야 함</td><td class="pick">VPC / IAM / IRSA / EKS 모듈로 나눠 담당자별 분업</td></tr>
+        <tr><td>Worker Node가 외부에 노출되면 공격 표면이 커짐</td><td class="pick">Private Subnet에만 배치, Public IP 없이 구성하고 EBS 암호화</td></tr>
+        <tr><td>클러스터에서 무슨 일이 있었는지 추적할 근거가 필요함</td><td class="pick">Control Plane 로그 5종을 CloudWatch로 수집</td></tr>
+      </tbody>
+    </table>
 
     <h3><span class="n">03</span>주요 작업</h3>
     <ol class="steps">
-      <li><b><span>1</span>Terraform 모듈 구조 설계</b><p>VPC / IAM / IRSA / EKS 모듈로 나눠 environments/dev에서 output을 조합해 apply. Region·Subnet ID 하드코딩 없이 변수화, tfvars·tfstate는 저장소에서 제외</p></li>
-      <li><b><span>2</span>EKS Cluster 구성</b><p>두 AZ의 Public·Private Subnet 4개 연결, 인증 모드 EKS API. API·Audit·Authenticator·Controller Manager·Scheduler 로그 5종을 CloudWatch로 수집</p></li>
-      <li><b><span>3</span>Worker Node 구성 (Managed Node Group)</b><p>Private Subnet 2개에만 배치(t3.medium, 최소·기본 2 / 최대 10). Launch Template으로 루트 디스크 gp3 30GiB · EBS 암호화</p></li>
-      <li><b><span>4</span>Add-on 설치 순서 제어</b><p>네트워크 플러그인 없이 노드가 뜨지 않도록 VPC CNI → Node Group → CoreDNS · kube-proxy 순으로 depends_on 설정</p></li>
-      <li><b><span>5</span>배포 검증</b><p>fmt → validate → plan → apply 후 Cluster·Node Group·Add-on Active, Worker Node 2개 Ready · 서로 다른 AZ · Public IP 없음 확인</p></li>
+      <li><b><span>1</span>Terraform 모듈 구조 설계</b><p>VPC / IAM / IRSA / EKS 모듈로 나누고, environments/dev에서 각 모듈의 output을 조합해 apply하도록 구성했습니다. tfvars·tfstate는 저장소에서 제외했습니다.</p></li>
+      <li><b><span>2</span>EKS Cluster 구성</b><p>두 AZ의 Public·Private Subnet 4개를 연결하고 인증 모드는 EKS API로 설정했습니다. API·Audit·Authenticator·Controller Manager·Scheduler 로그를 CloudWatch로 수집했습니다.</p></li>
+      <li><b><span>3</span>Worker Node 구성 (Managed Node Group)</b><p>t3.medium 노드를 Private Subnet 2개에만 배치하고(최소·기본 2 / 최대 10), Launch Template으로 루트 디스크를 gp3 30GiB·EBS 암호화로 지정했습니다.</p></li>
+      <li><b><span>4</span>Add-on 설치 순서 제어</b><p>네트워크 플러그인 없이 노드가 먼저 뜨지 않도록 VPC CNI → Node Group → CoreDNS·kube-proxy 순으로 depends_on을 설정했습니다.</p></li>
+      <li><b><span>5</span>배포 검증</b><p>fmt → validate → plan → apply 후 Cluster·Node Group·Add-on이 Active인지, Worker Node 2개가 서로 다른 AZ에서 Public IP 없이 Ready인지 확인했습니다.</p></li>
     </ol>
 
     <h3><span class="n">04</span>트러블슈팅</h3>
     <div class="ts">
       <b>IAM 모듈에 생성 시점이 다른 리소스가 섞여 의존성이 꼬인 문제</b>
       <dl class="kv">
-        <dt>문제</dt><dd>IRSA 코드를 추가하자 IAM·EKS 모듈 의존성이 꼬여 적용 순서를 잡을 수 없었고, Load Balancer Controller 설치까지 막힘</dd>
-        <dt class="cause">원인</dt><dd class="cause">EKS 생성 "전"에 필요한 Role과 "후"에 만드는 OIDC·IRSA가 한 모듈에 섞였고, Decoy S3가 필요한 시나리오 IRSA 때문에 LBC도 적용할 수 없었음</dd>
-        <dt>조치</dt><dd>IAM 담당 팀원과 원인을 확인해 IAM / IRSA 모듈을 분리하고, IRSA는 용도별 3개로 분리</dd>
+        <dt>문제</dt><dd>IRSA 코드를 추가하자 IAM·EKS 모듈 간 적용 순서를 잡을 수 없었고, Load Balancer Controller 설치까지 막힘</dd>
+        <dt class="cause">원인</dt><dd class="cause">EKS 생성 "전"에 필요한 Role과 "후"에 만드는 OIDC·IRSA가 한 모듈에 섞여 있었고, Decoy S3가 있어야 하는 시나리오용 IRSA 때문에 LBC도 함께 묶여 있었음</dd>
+        <dt>조치</dt><dd>IAM 담당 팀원과 원인을 확인해 IAM / IRSA 모듈을 분리하고, IRSA는 용도별로 3개로 나눔</dd>
         <dt>결과</dt><dd>terraform plan 통과, Decoy S3 준비와 관계없이 LBC Pod Running</dd>
       </dl>
 <pre class="code"><span class="dim"># 분리 전</span>
@@ -292,15 +297,15 @@ irsa/oidc-lbc-irsa         ← EKS 생성 후, 즉시 필요
       <b>Worker Node EC2에 Name 태그가 붙지 않은 문제</b>
       <dl class="kv">
         <dt>문제</dt><dd>Node Group에 태그를 지정했지만 EC2 인스턴스 이름이 비어 있음</dd>
-        <dt class="cause">원인</dt><dd class="cause">Managed Node Group 태그는 EC2 인스턴스 Name 태그로 자동 전파되지 않음</dd>
-        <dt>조치</dt><dd>Launch Template의 tag_specifications로 지정하고, 콘솔 수정 없이 Terraform이 노드를 교체하도록 적용</dd>
+        <dt class="cause">원인</dt><dd class="cause">Managed Node Group의 태그는 EC2 인스턴스 Name 태그로 자동 전파되지 않음</dd>
+        <dt>조치</dt><dd>Launch Template의 tag_specifications로 지정하고, 콘솔에서 고치지 않고 Terraform으로 노드를 교체</dd>
         <dt>결과</dt><dd>Name 태그 적용, 코드와 실제 상태 일치 유지</dd>
       </dl>
     </div>
 
     <h3><span class="n">05</span>배운 점</h3>
-    <p>모듈은 기능뿐 아니라 "언제 생성되는지"와 "무엇에 의존하는지"를 기준으로 나눠야 한다는 것을 배웠습니다. 모듈 경계에서 생긴 문제는 담당 팀원과 함께 봐야 빠르게 원인을 찾을 수 있었습니다.</p>
-    <p>콘솔에서 고치면 코드와 실제 상태가 어긋난다는 것도 배웠습니다. 다음 단계로 이 클러스터에 모니터링을 붙여 장애 감지와 원인 확인까지 검증할 계획입니다.</p>
+    <p>모듈은 기능만이 아니라 "언제 생성되는지"와 "무엇에 의존하는지"를 기준으로 나눠야 한다는 것을 배웠습니다. 모듈 경계에서 생긴 문제는 담당 팀원과 함께 봐야 원인을 빨리 찾을 수 있었습니다.</p>
+    <p>콘솔에서 직접 고치면 코드와 실제 상태가 어긋난다는 것도 알게 됐습니다. 다음 단계로 이 클러스터에 모니터링을 붙여 장애 감지와 원인 확인까지 검증할 계획입니다.</p>
       <div class="links-row"><a class="btn" href="https://github.com/Halee0090/aws-eks-cnapp-project" target="_blank" rel="noopener">GitHub ↗</a></div>
   </div>
 </dialog>
