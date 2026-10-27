@@ -125,7 +125,7 @@
       <div class="sub-cards">
         <button class="pcard" data-open="m-diet" aria-haspopup="dialog">
           <div class="cover diet"><div class="metric">첫 AWS 배포<small>EC2 · RDS · S3</small></div></div>
-          <div class="body"><h3>AI 기반 식단관리 서비스</h3><div class="meta">6인 팀 · 2024.08 ~ 09</div><span class="more">자세히 보기 →</span></div>
+          <div class="body"><h3>Wellness | AI 기반 식단 관리 서비스</h3><div class="meta">6인 팀 · 2024.08 ~ 09</div><span class="more">자세히 보기 →</span></div>
         </button>
         <button class="pcard" data-open="m-ids" aria-haspopup="dialog">
           <div class="cover ids"><div class="metric">경보 → 패킷 → 로그<small>6개 시나리오 근거 대조</small></div></div>
@@ -293,32 +293,34 @@
 <dialog class="detail" id="m-diet" aria-labelledby="m-diet-title">
   <div class="head cover diet">
     <div class="label">MORE</div>
-    <h2 id="m-diet-title">AI 기반 식단관리 서비스</h2>
+    <h2 id="m-diet-title">Wellness | AI 기반 식단 관리 서비스</h2>
     <a class="head-link" href="https://github.com/pladata-encore/DE31-final-team5" target="_blank" rel="noopener">github.com/pladata-encore/DE31-final-team5 ↗</a>
     <div class="meta">6인 팀 · 2024.08 ~ 2024.09 · API 개발 · 서비스 배포</div>
     <button class="close" aria-label="닫기">×</button>
   </div>
   <div class="content">
     <h3><span class="n">01</span>프로젝트 소개</h3>
-    <p>음식 사진 한 장으로 메뉴를 인식하고 영양 정보를 기록하는 모바일 앱입니다. 플레이데이터 부트캠프 최종 프로젝트로 6명이 2024년 8월부터 9월까지 함께 개발했고, 저는 <b>API 개발</b>을 맡았습니다.</p>
+    <p>음식 사진을 AI로 분류하여 칼로리·영양 정보를 제공하고, 일일 식사 기록을 관리하는 서비스입니다. 저는 <b>백엔드 API를 개발</b>하고, <b>온프레미스 PostgreSQL 데이터베이스를 AWS RDS로 이전</b>했으며, <b>AWS EC2 서버에 서비스를 Docker 컨테이너로 배포</b>하는 작업을 담당했습니다.</p>
     <figure><img src="assets/img/diet-app.png" alt="식단관리 앱 화면" loading="lazy"><figcaption>오늘의 섭취 현황, 사진 분석 결과, 식사별 기록</figcaption></figure>
+    <figure><img src="assets/img/diet-architecture.png" alt="Wellness AWS 아키텍처 · VPC 2개 AZ의 Public Subnet EC2와 Private Subnet RDS(PostgreSQL), Internet Gateway, S3" loading="lazy"></figure>
 
     <h3><span class="n">02</span>배경과 목적</h3>
     <dl class="kv">
-      <dt>배경</dt><dd>건강 관리에 관심이 많고 모바일 앱에 익숙한 젊은 세대를 대상으로, 먹은 음식을 하나씩 검색해 입력하지 않아도 식단을 기록할 수 있는 서비스를 기획했습니다.</dd>
-      <dt>목적</dt><dd>① 사진 업로드만으로 음식을 인식하고 영양 정보 기록 ② 사용자 신체 정보를 바탕으로 일일 권장 영양소 추천</dd>
+      <dt>배경</dt><dd>앱과 AI 모델을 연결할 API와 외부에서 접근 가능한 서비스 환경이 필요했습니다.</dd>
+      <dt>목적</dt><dd>① FastAPI로 앱과 모델 서버·데이터베이스를 연결하는 API 구현 ② 온프레미스 PostgreSQL을 RDS로 이전하고 EC2에 서비스를 배포하여 클라우드 실행 환경 구성 ③ 모델 서버와 백엔드를 Docker 컨테이너로 분리하여 실행 환경을 일관되게 유지하고 배포·관리 편의성 확보</dd>
     </dl>
 
     <h3><span class="n">03</span>주요 작업</h3>
     <ol class="steps">
-      <li><b><span>1</span>API 설계 및 구현</b><p>FastAPI로 회원가입·로그인·인증, 영양 추천, 음식 인식, 식단 기록, 기록 조회 API를 구성했습니다.</p></li>
-      <li><b><span>2</span>카카오 로그인과 JWT 인증</b><p>카카오 소셜 로그인(OAuth 2.0)으로 가입·로그인하고 자체 JWT를 발급했습니다. 식단 기록·추천·음식 인식 API는 토큰 검증을 거쳐야 호출되도록 했습니다.</p></li>
-      <li><b><span>3</span>음식 인식 API</b><p>업로드한 이미지의 형식(jpg·png)을 검사한 뒤 S3에 저장하고, 분리된 Model 서버에 추론을 요청했습니다. 사진의 촬영 시간(EXIF)으로 아침·점심·저녁·기타 식사 타입을 자동으로 지정했습니다.</p></li>
-      <li><b><span>4</span>서비스 배포</b><p>백엔드를 Docker 이미지로 만들어 EC2에서 실행하고, 데이터는 RDS(PostgreSQL), 사진은 S3에 저장했습니다.</p></li>
+      <li><b><span>1</span>PostgreSQL 데이터베이스의 AWS RDS 마이그레이션</b><p>온프레미스에서 사용하던 PostgreSQL 데이터베이스를 AWS RDS로 마이그레이션하여 데이터베이스 실행 환경을 클라우드로 이전했습니다.</p></li>
+      <li><b><span>2</span>EC2 기반 Docker 컨테이너 배포</b><p>EC2 서버 환경을 구성하고, 모델 서버와 백엔드 애플리케이션을 각각 Docker 컨테이너로 배포했습니다.</p></li>
+      <li><b><span>3</span>FastAPI 기반 백엔드 API 개발 및 모델 서버 연동</b><p>영양 정보 조회, 식사 기록 저장·조회 API를 개발하고, 별도의 모델 서버와 연동하여 음식 이미지 분류 결과와 영양 정보를 앱에 제공했습니다.</p></li>
+      <li><b><span>4</span>Git/GitHub 기반 코드 관리</b><p>Git으로 백엔드 코드의 변경 이력을 관리하고, GitHub 저장소를 통해 팀원들과 코드를 공유했습니다.</p></li>
     </ol>
 
     <h3><span class="n">04</span>배운 점</h3>
-    <p>API를 만들면서 서비스가 실제로 동작하려면 EC2·RDS·S3 같은 인프라가 함께 갖춰져야 한다는 것을 알게 됐습니다. 당시 VPC·보안 설정은 인프라 담당 팀원이 맡았는데, 이 경험을 계기로 인프라에 관심을 갖게 되어 폴리텍 클라우드컴퓨팅 과정에서 직접 실습하며 보완했습니다.</p>
+    <p>온프레미스 PostgreSQL 데이터베이스를 AWS RDS로 이전하면서, 클라우드 전환은 단순히 데이터를 옮기는 작업이 아니라 애플리케이션과 데이터베이스의 연결 환경까지 함께 고려해야 하는 과정임을 배웠습니다. 이를 통해 직접 관리하는 데이터베이스와 클라우드 관리형 서비스를 활용하는 방식의 차이를 이해했습니다.</p>
+    <p>또한 EC2에 모델 서버와 백엔드 애플리케이션을 Docker 컨테이너로 배포하며, 서버 환경 구성부터 서비스 실행까지의 흐름을 경험했습니다. 클라우드 환경에 서비스를 배포하는 과정을 통해 개별 애플리케이션뿐 아니라 각 구성 요소가 연결된 전체 서비스 구조를 바라보는 시각을 넓혔습니다.</p>
   </div>
 </dialog>
 
