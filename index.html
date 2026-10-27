@@ -205,11 +205,11 @@
 
     <h3><span class="n">03</span>주요 작업</h3>
     <ol class="steps">
-      <li><b><span>1</span>개발·운영 서버 인프라 구축 및 초기 설정 자동화</b><p>학교 서버 WSL(Ubuntu 24.04) 환경에 SSH, 사용자·권한, 호스트명, 시간대, UFW, Docker를 설정하고 개발·운영 2개 환경의 역할 분리. 반복되는 설정은 실행 권한과 호스트명 등 입력 조건을 확인한 뒤 사용자·권한, 패키지 업데이트, UFW, Docker 설치, 서비스 활성화를 순서대로 수행하는 Shell Script로 정리</p><p class="check">✔ SSH 접속, 방화벽 상태, Docker 서비스와 테스트 컨테이너 실행 확인, 스크립트 실행 후 확인 절차 문서화</p></li>
-      <li><b><span>2</span>Cloudflare Tunnel로 개발·운영 서비스 외부 연결</b><p>교수님께 터널링 방식을 소개받아 기능을 조사하고 Cloudflare Tunnel 선택. 팀원이 도메인을 Cloudflare에 연결한 뒤, 개발·운영 도메인 2개를 Tunnel에 추가해 각 서버의 서비스로 연결</p><p class="check">✔ 개발·운영 사이트 2개를 외부에서 접속</p></li>
-      <li><b><span>3</span>Jenkins 활용하여 CI/CD 파이프라인 구축</b><p>개발 서버에 Jenkins Controller를 두고 개발·운영 Agent를 SSH로 연결. 운영 파이프라인에 체크아웃 → Compose 설정 검증 → 이미지 빌드 → DB 마이그레이션 → 배포 → 내부·외부 헬스 체크 → Slack 알림 단계를 구성하고, 개발·운영 환경변수 분리</p><p class="check">✔ 운영 Agent에서 작업 실행, 작업 브랜치에서 파이프라인 테스트</p>
+      <li><b><span>1</span>개발·운영 서버 인프라 구축 및 초기 설정 자동화</b><p>학교 서버 WSL(Ubuntu 24.04) 환경에 SSH, 사용자·권한, 호스트명, 시간대, UFW, Docker를 설정하고, 팀원들이 같은 환경으로 작업할 수 있도록 Shell Script로 정리해 초기 설정을 자동화했습니다.</p></li>
+      <li><b><span>2</span>Cloudflare Tunnel로 개발·운영 서비스 외부 연결</b><p>가비아에서 구입한 도메인을 Cloudflare Tunnel에 연결해 개발·운영 도메인을 각 서버의 서비스로 연결했습니다.</p></li>
+      <li><b><span>3</span>Jenkins 활용하여 CI/CD 파이프라인 구축</b><p>GitHub에 코드를 push하면 Webhook이 작동해 코드를 통합·테스트하고, Docker 이미지를 빌드해 배포한 뒤 헬스 체크까지 마치면 Slack으로 알림이 오도록 구성했습니다.</p>
         <figure><img src="assets/img/th-jenkins.png" alt="Jenkins 파이프라인 빌드 기록" loading="lazy"></figure></li>
-      <li><b><span>4</span>Jenkins 접근 보안 적용</b><p>GitHub 조직 멤버 인증, GitHub 계정 MFA, 지정 IP 조건을 조합한 접근 정책 적용. 관리자 로그인과 GitHub Webhook 경로는 용도가 달라 정책 분리</p><p class="check">✔ 허용·차단 환경의 접속 결과와 Access 로그 대조</p></li>
+      <li><b><span>4</span>Jenkins 접근 보안 적용</b><p>외부에서 접속할 수 있던 Jenkins 관리자 페이지에 보안을 설정했습니다. Cloudflare에서 공인 IP와 GitHub Webhook 경로의 IP만 허용하고, GitHub ID 화이트리스트로 팀원만 접근하도록 해 보안을 강화했습니다.</p></li>
     </ol>
 
     <h3><span class="n">04</span>트러블슈팅</h3>
@@ -233,9 +233,9 @@
     </div>
 
     <h3><span class="n">05</span>배운 점</h3>
-    <p>서버 구축은 설치 명령을 실행하는 데서 끝나지 않았습니다. 스크립트로 같은 설정을 다시 적용할 수 있게 만들고, SSH·방화벽·Docker의 동작을 확인해야 환경을 설명할 수 있었습니다. 학교 네트워크를 직접 변경할 수 없는 제약에서는 Tunnel을 이용해 서비스 접근 경로를 구성했습니다. Jenkins에서도 Agent 연결, 파이프라인 실행, 배포 후 확인 단계를 나누어 검증했습니다. Webhook 302 오류를 겪으며 관리자 접속과 자동화 요청은 목적과 출발지가 다르므로, 접근 정책도 경로별로 나누고 GitHub Delivery 응답과 Jenkins 실행 결과를 함께 봐야 한다는 점을 배웠습니다.</p>
-    <p>프로젝트를 주도하면서 개발, CI/CD, 보안 담당자가 각각 어떤 작업을 맡고 서로 어떤 설정에 의존하는지 파악했습니다. 특히 도메인 연결은 팀원이 맡고, 저는 그 이후의 Tunnel 연결과 서버·배포 환경을 맡아 각 작업이 이어지도록 했습니다.</p>
-    <p>앞으로 운영 브랜치 기준 배포와 실패 후 재배포·복구 절차를 반복 확인하고, Jenkins 보안 점검에서 정리한 후속 개선 항목의 조치 결과를 기록할 계획입니다.</p>
+    <p>인프라 구축은 설치에서 시작되지만, 그 이후 점검과 유지보수가 필요하다는 것을 알았습니다. 다른 환경에서 작업하려 하니 오류가 자꾸 발생해, Shell Script로 사용자 권한 설정, 패키지 설치, UFW 설정, Docker 설치, 서비스 활성화를 작성하여 모두 동일한 환경에서 작업했습니다.</p>
+    <p>또 Jenkins 관리자 페이지에 IP 제한을 걸었을 때 GitHub Webhook 요청까지 막혀 자동 빌드가 멈춘 일을 겪으며, 보안 설정을 바꾸면 그 설정에 기대고 있던 자동화 흐름까지 함께 확인해야 한다는 것을 배웠습니다. 관리자 접속과 자동화 요청은 목적과 출발지가 다르기 때문에 접근 정책도 경로별로 나눠야 했습니다.</p>
+    <p>프로젝트를 주도하면서 개발, CI/CD, 보안 담당자가 서로 어떤 설정에 의존하는지 파악하고, 각 작업이 끊기지 않도록 순서를 조율하는 것이 중요하다는 것을 느꼈습니다.</p>
     <div class="links-row"><a class="btn" href="https://github.com/travel-hunter/travel-hunter-onprem" target="_blank" rel="noopener">GitHub ↗</a></div>
   </div>
 </dialog>
