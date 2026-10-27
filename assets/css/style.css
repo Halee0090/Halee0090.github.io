@@ -217,3 +217,10 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 28px
   .detail .head h2 { font-size: 21px; padding-right: 36px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+table.compare { width: 100%; border-collapse: collapse; font-size: 14.5px; margin: 4px 0 12px; }
+table.compare th, table.compare td { border: 1px solid var(--line); padding: 9px 12px; text-align: left; vertical-align: top; }
+table.compare th { background: #f1f5f9; font-weight: 700; }
+table.compare td.pick { background: var(--accent-soft); font-weight: 600; color: #1e3a8a; }
+table.compare th.pick { background: #dbeafe; }
+@media (max-width: 860px) { table.compare { font-size: 13.5px; } }

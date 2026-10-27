@@ -208,11 +208,16 @@
       <img src="assets/img/th-map.png" alt="지도 기반 혜택 탐색 화면" loading="lazy">
     </div>
 
-    <h3><span class="n">02</span>배경과 목표</h3>
-    <dl class="kv">
-      <dt>배경</dt><dd>팀원마다 서버 설정을 수동으로 적용하다 일부 항목이 빠져 오류가 반복됐고, 코드 변경이 잦아 빌드·배포를 수동으로 반복하기 어려웠습니다. 또 학교 PC에서 실행하는 서버에 외부 접속 경로가 필요했지만, 학교 네트워크 설정은 바꿀 수 없었습니다.</dd>
-      <dt>목표</dt><dd>① 팀원 모두 같은 서버 환경 준비  ② 개발·운영 서비스를 외부에서 이용  ③ GitHub에 코드가 반영되면 Jenkins가 빌드·배포 시작  ④ Jenkins 관리자 화면은 허가된 팀원만 지정된 환경에서 접근</dd>
-    </dl>
+    <h3><span class="n">02</span>프로젝트 개요</h3>
+    <table class="compare ps">
+      <thead><tr><th>문제</th><th class="pick">해결</th></tr></thead>
+      <tbody>
+        <tr><td>팀원마다 서버를 수동 설정하다 항목이 빠져 오류 반복</td><td class="pick">Shell Script로 초기 설정 표준화</td></tr>
+        <tr><td>코드 변경이 잦아 빌드·배포를 수동으로 반복</td><td class="pick">Jenkins + GitHub Webhook으로 자동 배포</td></tr>
+        <tr><td>학교 네트워크를 바꿀 수 없어 외부 접속 경로가 없음</td><td class="pick">Cloudflare Tunnel로 포트 개방 없이 외부 공개</td></tr>
+        <tr><td>Jenkins 관리자 화면이 외부에 노출됨</td><td class="pick">Cloudflare Access로 허가된 팀원만 접근</td></tr>
+      </tbody>
+    </table>
     <figure>
       <img src="assets/img/th-architecture.png" alt="TravelHunter 시스템 구성도" loading="lazy">
       <figcaption>사용자 요청은 Cloudflare Tunnel과 Caddy를 거쳐 앱으로 들어오고, Jenkins가 빌드 · DB 마이그레이션 · 컨테이너 재시작을 수행</figcaption>
