@@ -278,7 +278,7 @@
         <dt>문제</dt><dd>IRSA 코드를 추가하자 IAM·EKS 모듈 간 적용 순서를 잡을 수 없었고, Load Balancer Controller 설치까지 막힘</dd>
         <dt class="cause">원인</dt><dd class="cause">EKS 생성 "전"에 필요한 Role과 "후"에 만드는 OIDC·IRSA가 한 모듈에 섞여 있었고, Decoy S3가 있어야 하는 시나리오용 IRSA 때문에 LBC도 함께 묶여 있었음</dd>
         <dt>조치</dt><dd>IAM 담당 팀원과 원인을 확인해 IAM / IRSA 모듈을 분리하고, IRSA는 용도별로 3개로 나눔</dd>
-        <dt>결과</dt><dd>terraform plan 통과, Decoy S3 준비와 관계없이 LBC Pod Running</dd>
+        <dt>결과</dt><dd>IAM/IRSA 코드 분리 후 Load Balancer Controller 설치가 됨</dd>
       </dl>
 <pre class="code"><span class="dim"># 분리 전</span>
 modules/iam   ← Cluster·Node Role + OIDC + IRSA(LBC·시나리오 A·B)
