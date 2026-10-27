@@ -211,7 +211,6 @@
     <figcaption>서비스 화면 · 로그인, 홈(이번 주 혜택), 지도 기반 정책 탐색, 내 일정</figcaption>
     <figure>
       <img src="assets/img/th-architecture-v2.png" alt="TravelHunter 시스템 구성도" loading="lazy">
-      <figcaption>시스템 구성도 · 사용자 요청은 Cloudflare와 Caddy를 거쳐 FastAPI로 들어오고, Jenkins가 빌드 · DB 마이그레이션 · 재시작을 수행</figcaption>
     </figure>
 
     <h3><span class="n">02</span>프로젝트 개요</h3>
@@ -243,9 +242,6 @@
         <dt>조치</dt><dd>docker volume ls로 기존 볼륨을 찾아 임시 PostgreSQL 컨테이너에 연결하고 pg_dump로 추출해 현재 DB에 복원</dd>
         <dt>결과</dt><dd>테이블 20개, 정책 데이터 23건 복구 확인. 백업 파일은 프로젝트 폴더 밖에 보관</dd>
       </dl>
-<pre class="code"><span class="dim">$ docker volume ls | grep db</span>
-<span class="hl">travelhunterapp_travelhunter-db        ← 기존 데이터가 있는 볼륨</span>
-<span class="hl">travel-hunter-onprem_travelhunter-db   ← 앱이 연결된 새 빈 볼륨</span></pre>
     </div>
     <div class="ts">
       <b>Cloudflare Access 적용 후 GitHub Webhook에 302 응답이 발생한 문제</b>
@@ -258,9 +254,9 @@
     </div>
 
     <h3><span class="n">05</span>배운 점</h3>
-    <p>서버 구축은 설치 명령을 실행하는 데서 끝나지 않았습니다. 스크립트로 같은 설정을 다시 적용할 수 있게 만들고 SSH·방화벽·Docker 동작을 확인해야 환경을 설명할 수 있었고, 이 경험은 Terraform으로 인프라를 코드화한 Project 02로 이어졌습니다.</p>
-    <p>Webhook 302 오류를 겪으며 관리자 접속과 자동화 요청은 목적과 출발지가 다르므로 접근 정책도 경로별로 나눠야 하고, GitHub Delivery 응답과 Jenkins 실행 결과를 함께 봐야 한다는 점을 배웠습니다.</p>
-    <p>프로젝트를 주도하며 개발·CI/CD·보안 담당자가 서로 어떤 설정에 의존하는지 파악했습니다. 도메인 연결은 팀원이, 이후 Tunnel 연결과 서버·배포 환경은 제가 맡아 작업이 끊기지 않도록 조율했습니다.</p>
+    <p>서버 구축은 설치 명령을 실행하는 데서 끝나지 않았습니다. 스크립트로 같은 설정을 다시 적용할 수 있게 만들고, SSH·방화벽·Docker의 동작을 확인해야 환경을 설명할 수 있었습니다. 학교 네트워크를 직접 변경할 수 없는 제약에서는 Tunnel을 이용해 서비스 접근 경로를 구성했습니다. Jenkins에서도 Agent 연결, 파이프라인 실행, 배포 후 확인 단계를 나누어 검증했습니다. Webhook 302 오류를 겪으며 관리자 접속과 자동화 요청은 목적과 출발지가 다르므로, 접근 정책도 경로별로 나누고 GitHub Delivery 응답과 Jenkins 실행 결과를 함께 봐야 한다는 점을 배웠습니다.</p>
+    <p>프로젝트를 주도하면서 개발, CI/CD, 보안 담당자가 각각 어떤 작업을 맡고 서로 어떤 설정에 의존하는지 파악했습니다. 특히 도메인 연결은 팀원이 맡고, 저는 그 이후의 Tunnel 연결과 서버·배포 환경을 맡아 각 작업이 이어지도록 했습니다.</p>
+    <p>앞으로 운영 브랜치 기준 배포와 실패 후 재배포·복구 절차를 반복 확인하고, Jenkins 보안 점검에서 정리한 후속 개선 항목의 조치 결과를 기록할 계획입니다.</p>
     <div class="links-row"><a class="btn" href="https://github.com/travel-hunter/travel-hunter-onprem" target="_blank" rel="noopener">GitHub ↗</a></div>
   </div>
 </dialog>
