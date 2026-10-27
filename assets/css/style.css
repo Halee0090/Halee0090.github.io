@@ -236,3 +236,6 @@ table.compare th.pick { background: #dbeafe; }
 .skill-item ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
 .skill-item li { font-size: 15px; color: #334155; }
 @media (max-width: 860px) { .skill-item { grid-template-columns: 1fr; gap: 6px; } }
+
+.skill-etc-label { margin: 22px 0 8px; font-size: 13px; font-weight: 800; letter-spacing: .1em; color: var(--accent); }
+.skill-list.etc .skill-name { color: var(--sub); }
