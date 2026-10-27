@@ -201,7 +201,7 @@
   </div>
   <div class="content">
     <h3><span class="n">01</span>프로젝트 소개</h3>
-    <p>국내 여행 정책·혜택을 찾아 여행 일정을 계획하는 서비스입니다. 5명이 2026년 6월부터 함께 작업하고 있고, 저는 프로젝트를 주도하며 <b>인프라 구축, CI/CD 배포 자동화, CI/CD 보안</b>을 맡았습니다. 현재는 클라우드로 마이그레이션을 진행하고 있습니다.</p>
+    <p>국내 여행 정책, 혜택을 찾아 여행 일정을 계획하는 웹앱 서비스입니다. 5명이 2026년 6월부터 함께 작업하고 있고, 저는 프로젝트를 주도하며 <b>인프라 구축, CI/CD 배포 자동화, CI/CD 보안</b>을 맡았습니다. 현재는 AWS 클라우드로 마이그레이션을 진행하고 있습니다.</p>
     <div class="shots shots4">
       <img src="assets/img/th-shot-login.png" alt="로그인 화면" loading="lazy">
       <img src="assets/img/th-shot-home.png" alt="홈 화면 - 이번 주 혜택" loading="lazy">
@@ -218,38 +218,38 @@
       <thead><tr><th>문제</th><th class="pick">해결</th></tr></thead>
       <tbody>
         <tr><td>팀원마다 서버를 수동 설정하다 항목이 빠져 오류 반복</td><td class="pick">Shell Script로 초기 설정 표준화</td></tr>
-        <tr><td>코드 변경이 잦아 빌드·배포를 수동으로 반복</td><td class="pick">Jenkins + GitHub Webhook으로 자동 배포</td></tr>
         <tr><td>학교 네트워크를 바꿀 수 없어 외부 접속 경로가 없음</td><td class="pick">Cloudflare Tunnel로 포트 개방 없이 외부 공개</td></tr>
-        <tr><td>Jenkins 관리자 화면이 외부에 노출됨</td><td class="pick">Cloudflare Access로 허가된 팀원만 접근</td></tr>
+        <tr><td>코드 변경이 잦아 빌드·배포를 수동으로 반복</td><td class="pick">Jenkins + GitHub Webhook으로 자동 배포</td></tr>
+        <tr><td>Jenkins 관리자 화면이 외부에 노출됨</td><td class="pick">Cloudflare에서 화이트리스트를 설정해 Access 허용</td></tr>
       </tbody>
     </table>
+
     <h3><span class="n">03</span>주요 작업</h3>
     <ol class="steps">
-      <li><b><span>1</span>개발·운영 서버 인프라 구축</b><p>학교 서버 WSL(Ubuntu 24.04) 환경에 SSH, 사용자·권한, 호스트명, 시간대, UFW, Docker를 설정하고 개발·운영 2개 환경의 역할 분리</p><p class="check">✔ SSH 접속, 방화벽 상태, Docker 서비스와 테스트 컨테이너 실행</p></li>
-      <li><b><span>2</span>서버 초기 설정 자동화 (Shell Script)</b><p>실행 권한과 호스트명 등 입력 조건을 확인한 뒤 사용자·권한, 패키지 업데이트, UFW, Docker 설치, 서비스 활성화를 순서대로 수행하는 스크립트 작성</p><p class="check">✔ 스크립트 1개와 실행 후 확인 절차를 문서로 정리</p></li>
-      <li><b><span>3</span>학교 네트워크 제약 아래 외부 접속 구성 (Cloudflare Tunnel)</b><p>교수님께 터널링 방식을 소개받아 기능을 조사하고 Cloudflare Tunnel 선택. 팀원이 도메인을 Cloudflare에 연결한 뒤, 개발·운영 도메인 2개를 Tunnel에 추가해 각 서버의 서비스로 연결</p><p class="check">✔ 개발·운영 사이트 2개를 외부에서 접속</p></li>
-      <li><b><span>4</span>Jenkins 배포 자동화 (Controller · Agent)</b><p>개발 서버에 Jenkins Controller를 두고 개발·운영 Agent를 SSH로 연결. 운영 파이프라인에 체크아웃 → Compose 설정 검증 → 이미지 빌드 → DB 마이그레이션 → 배포 → 내부·외부 헬스 체크 → Slack 알림 단계를 구성하고, 개발·운영 환경변수 분리</p><p class="check">✔ 운영 Agent에서 작업 실행, 작업 브랜치에서 파이프라인 테스트</p>
-        <figure><img src="assets/img/th-jenkins.png" alt="Jenkins 파이프라인 빌드 기록" loading="lazy"><figcaption>파이프라인 빌드 기록</figcaption></figure></li>
-      <li><b><span>5</span>Jenkins 접근 보안 (Cloudflare Access)</b><p>GitHub 조직 멤버 인증, GitHub 계정 MFA, 지정 IP 조건을 조합한 접근 정책 적용. 관리자 로그인과 GitHub Webhook 경로는 용도가 달라 정책 분리</p><p class="check">✔ 허용·차단 환경의 접속 결과와 Access 로그 대조</p></li>
+      <li><b><span>1</span>개발·운영 서버 인프라 구축 및 초기 설정 자동화</b><p>학교 서버 WSL(Ubuntu 24.04) 환경에 SSH, 사용자·권한, 호스트명, 시간대, UFW, Docker를 설정하고 개발·운영 2개 환경의 역할 분리. 반복되는 설정은 실행 권한과 호스트명 등 입력 조건을 확인한 뒤 사용자·권한, 패키지 업데이트, UFW, Docker 설치, 서비스 활성화를 순서대로 수행하는 Shell Script로 정리</p><p class="check">✔ SSH 접속, 방화벽 상태, Docker 서비스와 테스트 컨테이너 실행 확인, 스크립트 실행 후 확인 절차 문서화</p></li>
+      <li><b><span>2</span>Cloudflare Tunnel로 개발·운영 서비스 외부 연결</b><p>교수님께 터널링 방식을 소개받아 기능을 조사하고 Cloudflare Tunnel 선택. 팀원이 도메인을 Cloudflare에 연결한 뒤, 개발·운영 도메인 2개를 Tunnel에 추가해 각 서버의 서비스로 연결</p><p class="check">✔ 개발·운영 사이트 2개를 외부에서 접속</p></li>
+      <li><b><span>3</span>Jenkins 활용하여 CI/CD 파이프라인 구축</b><p>개발 서버에 Jenkins Controller를 두고 개발·운영 Agent를 SSH로 연결. 운영 파이프라인에 체크아웃 → Compose 설정 검증 → 이미지 빌드 → DB 마이그레이션 → 배포 → 내부·외부 헬스 체크 → Slack 알림 단계를 구성하고, 개발·운영 환경변수 분리</p><p class="check">✔ 운영 Agent에서 작업 실행, 작업 브랜치에서 파이프라인 테스트</p>
+        <figure><img src="assets/img/th-jenkins.png" alt="Jenkins 파이프라인 빌드 기록" loading="lazy"></figure></li>
+      <li><b><span>4</span>Jenkins 접근 보안 적용</b><p>GitHub 조직 멤버 인증, GitHub 계정 MFA, 지정 IP 조건을 조합한 접근 정책 적용. 관리자 로그인과 GitHub Webhook 경로는 용도가 달라 정책 분리</p><p class="check">✔ 허용·차단 환경의 접속 결과와 Access 로그 대조</p></li>
     </ol>
 
     <h3><span class="n">04</span>트러블슈팅</h3>
     <div class="ts">
-      <b>재배포 후 DB 데이터가 사라진 것처럼 보인 문제</b>
+      <b>DB 데이터 유실 및 복구 문제</b>
       <dl class="kv">
         <dt>문제</dt><dd>재배포 후 앱은 열렸지만 기존 사용자·정책 데이터가 조회되지 않음</dd>
-        <dt class="cause">원인</dt><dd class="cause">프로젝트 폴더가 바뀌며 Compose가 새 이름의 빈 볼륨을 만들었고, 앱이 기존 볼륨이 아닌 새 볼륨에 연결되어 있었음</dd>
-        <dt>조치</dt><dd>docker volume ls로 기존 볼륨을 찾아 임시 PostgreSQL 컨테이너에 연결하고 pg_dump로 추출해 현재 DB에 복원</dd>
-        <dt>결과</dt><dd>테이블 20개, 정책 데이터 23건 복구 확인. 백업 파일은 프로젝트 폴더 밖에 보관</dd>
+        <dt class="cause">원인</dt><dd class="cause">GitHub 프로젝트 폴더가 바뀌면서 재배포 시 새 볼륨이 생성되었고, 앱이 기존 볼륨이 아닌 새 볼륨에 연결되어 있었음</dd>
+        <dt>조치</dt><dd>docker volume ls로 기존 볼륨을 찾아 pg_dump로 백업하여 현재 DB에 복원</dd>
+        <dt>결과</dt><dd>테이블 20개, 정책 데이터 23건, 사용자 데이터 10건 복구 확인, 웹 서비스에 데이터가 잘 반영됨</dd>
       </dl>
     </div>
     <div class="ts">
       <b>Cloudflare Access 적용 후 GitHub Webhook에 302 응답이 발생한 문제</b>
       <dl class="kv">
-        <dt>문제</dt><dd>Jenkins 관리 화면에 IP 제한을 적용한 뒤 push해도 자동 빌드가 시작되지 않았고, Webhook Recent deliveries에 302 Found 반복</dd>
+        <dt>문제</dt><dd>Jenkins 관리자 페이지가 외부에 공개되어 있어 Cloudflare Access로 Jenkins 전체 접근을 공인 IP 기준으로 제한했더니, push해도 자동 빌드가 시작되지 않았고 Webhook Recent Deliveries에 302 Found 반복</dd>
         <dt class="cause">원인</dt><dd class="cause">Jenkins 전체 경로에 적용한 IP 제한 때문에 학교 IP가 아닌 GitHub의 Webhook 요청도 Access 인증 단계로 보내져 /github-webhook/ 경로까지 전달되지 않음</dd>
         <dt>조치</dt><dd>관리자 화면 접근 제한은 유지하고, /github-webhook/ 경로 전용 Access Application을 만들어 GitHub 공식 hooks IP 대역에만 Bypass 정책 적용</dd>
-        <dt>결과</dt><dd>실패한 Delivery를 재전송해 응답 재확인. 후속으로 Webhook Secret 서명 검증과 hooks IP 대역 변경 점검 예정</dd>
+        <dt>결과</dt><dd>실패한 Delivery를 재전송해 응답 재확인, Jenkins 배포가 자동으로 되는지 확인</dd>
       </dl>
     </div>
 
