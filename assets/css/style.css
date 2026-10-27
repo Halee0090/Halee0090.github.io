@@ -224,3 +224,7 @@ table.compare th { background: #f1f5f9; font-weight: 700; }
 table.compare td.pick { background: var(--accent-soft); font-weight: 600; color: #1e3a8a; }
 table.compare th.pick { background: #dbeafe; }
 @media (max-width: 860px) { table.compare { font-size: 13.5px; } }
+
+.shots4 { grid-template-columns: repeat(4, 1fr); margin-top: 6px; }
+.shots4 img { aspect-ratio: 600 / 1095; object-fit: cover; object-position: top; }
+@media (max-width: 860px) { .shots4 { grid-template-columns: repeat(2, 1fr); } }
