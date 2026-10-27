@@ -167,6 +167,7 @@ dialog.detail::backdrop { background: rgba(2, 6, 23, .55); backdrop-filter: blur
 .steps li b { display: block; font-size: 15px; margin-bottom: 4px; }
 .steps li b span { color: var(--accent); font-family: "JetBrains Mono", monospace; margin-right: 6px; }
 .steps li p { margin: 0; font-size: 14.5px; color: #334155; }
+.steps li p.check { margin-top: 6px; font-size: 13.5px; color: #15803d; }
 
 .ts { border: 1px solid var(--warn-line); background: var(--warn-bg); border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; }
 .ts > b { display: block; font-size: 15px; margin-bottom: 10px; }

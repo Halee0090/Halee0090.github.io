@@ -196,36 +196,36 @@
   <div class="head cover th">
     <div class="label">PROJECT 01</div>
     <h2 id="m-th-title">TravelHunter</h2>
-    <div class="meta">5인 팀 (개발 1 · CI/CD 2 · 보안 2) · 2026.06 ~ 진행 중 · 프로젝트 주도 · 인프라 · CI/CD<br>FastAPI · Shell Script · Docker · Jenkins · Cloudflare · PostgreSQL · GitHub · AI Tool (Claude, ChatGPT)</div>
+    <div class="meta">5인 팀 (개발 1 · CI/CD 2 · 보안 2) · 2026.06 ~ 진행 중 · 프로젝트 주도 · 인프라 · CI/CD · CI/CD 보안<br>FastAPI · Shell Script · Docker · Jenkins · Cloudflare · PostgreSQL · GitHub · AI Tool (Claude, ChatGPT)</div>
     <button class="close" aria-label="닫기">×</button>
   </div>
   <div class="content">
     <h3><span class="n">01</span>프로젝트 소개</h3>
-    <p>국내 여행 정책·혜택을 찾아 여행 일정을 계획하는 서비스입니다. 저는 프로젝트를 주도하며 <b>서버 인프라, 배포 자동화, 접근 보안</b>을 맡았습니다.</p>
+    <p>국내 여행 정책·혜택을 찾아 여행 일정을 계획하는 서비스입니다. 5명이 2026년 6월부터 함께 작업하고 있고, 저는 프로젝트를 주도하며 <b>인프라 구축, CI/CD 배포 자동화, CI/CD 보안</b>을 맡았습니다. 현재는 클라우드로 마이그레이션을 진행하고 있습니다.</p>
     <div class="shots">
       <img src="assets/img/th-login.png" alt="로그인 화면" loading="lazy">
       <img src="assets/img/th-region.png" alt="관심 지역 혜택 화면" loading="lazy">
       <img src="assets/img/th-map.png" alt="지도 기반 혜택 탐색 화면" loading="lazy">
     </div>
 
-    <h3><span class="n">02</span>배경과 목적</h3>
+    <h3><span class="n">02</span>배경과 목표</h3>
     <dl class="kv">
-      <dt>배경</dt><dd>학교 PC를 서버로 쓰는 환경에서 팀원들이 각자 수동으로 설정하며 오류가 반복되었고, 학교 네트워크 설정은 바꿀 수 없어 외부에서 접속할 방법이 없었습니다.</dd>
-      <dt>목적</dt><dd>① 모든 서버에 같은 설정 적용 ② 포트 개방 없이 외부 접속 ③ 코드 변경 시 자동 배포 ④ 허가된 팀원만 관리자 화면 접근</dd>
+      <dt>배경</dt><dd>팀원마다 서버 설정을 수동으로 적용하다 일부 항목이 빠져 오류가 반복됐고, 코드 변경이 잦아 빌드·배포를 수동으로 반복하기 어려웠습니다. 또 학교 PC에서 실행하는 서버에 외부 접속 경로가 필요했지만, 학교 네트워크 설정은 바꿀 수 없었습니다.</dd>
+      <dt>목표</dt><dd>① 팀원 모두 같은 서버 환경 준비  ② 개발·운영 서비스를 외부에서 이용  ③ GitHub에 코드가 반영되면 Jenkins가 빌드·배포 시작  ④ Jenkins 관리자 화면은 허가된 팀원만 지정된 환경에서 접근</dd>
     </dl>
     <figure>
       <img src="assets/img/th-architecture.png" alt="TravelHunter 시스템 구성도" loading="lazy">
-      <figcaption>사용자 요청은 Caddy + Cloudflare를 거쳐 앱으로 들어오고, Jenkins가 빌드 · DB 마이그레이션 · 컨테이너 재시작을 수행</figcaption>
+      <figcaption>사용자 요청은 Cloudflare Tunnel과 Caddy를 거쳐 앱으로 들어오고, Jenkins가 빌드 · DB 마이그레이션 · 컨테이너 재시작을 수행</figcaption>
     </figure>
 
     <h3><span class="n">03</span>주요 작업</h3>
     <ol class="steps">
-      <li><b><span>1</span>서버 초기 설정 자동화 (Shell Script)</b><p>실행 권한과 호스트명 조건을 확인한 뒤 사용자·권한, 패키지 업데이트, UFW, Docker 설치·활성화를 순서대로 수행하는 스크립트로 팀원 서버 환경을 통일</p></li>
-      <li><b><span>2</span>외부 접속 구성 (Cloudflare Tunnel)</b><p>ngrok(사용량 제한 · 실행마다 URL 변경)과 비교해 인바운드 포트 개방 없이 고정 도메인을 쓰는 Cloudflare Tunnel을 선택, cloudflared로 개발·운영 도메인 2개 연결</p></li>
-      <li><b><span>3</span>Docker Compose 서비스 구성</b><p>cloudflared · Caddy · frontend · backend · PostgreSQL · Jenkins 6개 컨테이너로 분리하고, Caddy가 /api는 backend로 분기. healthcheck로 db → backend → frontend 순서로 기동</p></li>
-      <li><b><span>4</span>Jenkins 배포 자동화 (Controller · Agent)</b><p>개발 서버의 Controller에 개발·운영 Agent를 SSH로 연결. 체크아웃 → Compose 검증 → 이미지 빌드 → DB 마이그레이션 → 배포 → 헬스체크 → Slack 알림</p>
-        <figure><img src="assets/img/th-jenkins.png" alt="Jenkins 운영 파이프라인 빌드 기록" loading="lazy"><figcaption>운영 파이프라인 · 빌드 #14 ~ #17 전 단계 성공</figcaption></figure></li>
-      <li><b><span>5</span>관리자 접근 보안 (Cloudflare Access)</b><p>GitHub 조직 멤버 인증, GitHub 계정 MFA, 학교 공인 IP 조건을 조합한 정책을 적용하고, 허용·차단 결과를 Access 로그와 대조</p></li>
+      <li><b><span>1</span>개발·운영 서버 인프라 구축</b><p>학교 서버 WSL(Ubuntu 24.04) 환경에 SSH, 사용자·권한, 호스트명, 시간대, UFW, Docker를 설정하고 개발·운영 2개 환경의 역할 분리</p><p class="check">✔ SSH 접속, 방화벽 상태, Docker 서비스와 테스트 컨테이너 실행</p></li>
+      <li><b><span>2</span>서버 초기 설정 자동화 (Shell Script)</b><p>실행 권한과 호스트명 등 입력 조건을 확인한 뒤 사용자·권한, 패키지 업데이트, UFW, Docker 설치, 서비스 활성화를 순서대로 수행하는 스크립트 작성</p><p class="check">✔ 스크립트 1개와 실행 후 확인 절차를 문서로 정리</p></li>
+      <li><b><span>3</span>학교 네트워크 제약 아래 외부 접속 구성 (Cloudflare Tunnel)</b><p>교수님께 터널링 방식을 소개받아 기능을 조사하고 Cloudflare Tunnel 선택. 팀원이 도메인을 Cloudflare에 연결한 뒤, 개발·운영 도메인 2개를 Tunnel에 추가해 각 서버의 서비스로 연결</p><p class="check">✔ 개발·운영 사이트 2개를 외부에서 접속</p></li>
+      <li><b><span>4</span>Jenkins 배포 자동화 (Controller · Agent)</b><p>개발 서버에 Jenkins Controller를 두고 개발·운영 Agent를 SSH로 연결. 운영 파이프라인에 체크아웃 → Compose 설정 검증 → 이미지 빌드 → DB 마이그레이션 → 배포 → 내부·외부 헬스 체크 → Slack 알림 단계를 구성하고, 개발·운영 환경변수 분리</p><p class="check">✔ 운영 Agent에서 작업 실행, 작업 브랜치에서 파이프라인 테스트</p>
+        <figure><img src="assets/img/th-jenkins.png" alt="Jenkins 파이프라인 빌드 기록" loading="lazy"><figcaption>파이프라인 빌드 기록</figcaption></figure></li>
+      <li><b><span>5</span>Jenkins 접근 보안 (Cloudflare Access)</b><p>GitHub 조직 멤버 인증, GitHub 계정 MFA, 지정 IP 조건을 조합한 접근 정책 적용. 관리자 로그인과 GitHub Webhook 경로는 용도가 달라 정책 분리</p><p class="check">✔ 허용·차단 환경의 접속 결과와 Access 로그 대조</p></li>
     </ol>
 
     <h3><span class="n">04</span>트러블슈팅</h3>
@@ -233,28 +233,29 @@
       <b>재배포 후 DB 데이터가 사라진 것처럼 보인 문제</b>
       <dl class="kv">
         <dt>문제</dt><dd>재배포 후 앱은 열렸지만 기존 사용자·정책 데이터가 조회되지 않음</dd>
-        <dt class="cause">원인</dt><dd class="cause">프로젝트 폴더가 바뀌며 Compose가 새 이름의 빈 볼륨을 만들었고, 앱이 그 볼륨에 연결됨</dd>
-        <dt>조치</dt><dd>docker volume ls로 기존 볼륨을 찾아 임시 PostgreSQL 컨테이너에 연결하고 pg_dump로 추출해 복원</dd>
-        <dt>결과</dt><dd>테이블 20개, 정책 데이터 23건 복구. 백업 파일은 프로젝트 폴더 밖에 보관</dd>
+        <dt class="cause">원인</dt><dd class="cause">프로젝트 폴더가 바뀌며 Compose가 새 이름의 빈 볼륨을 만들었고, 앱이 기존 볼륨이 아닌 새 볼륨에 연결되어 있었음</dd>
+        <dt>조치</dt><dd>docker volume ls로 기존 볼륨을 찾아 임시 PostgreSQL 컨테이너에 연결하고 pg_dump로 추출해 현재 DB에 복원</dd>
+        <dt>결과</dt><dd>테이블 20개, 정책 데이터 23건 복구 확인. 백업 파일은 프로젝트 폴더 밖에 보관</dd>
       </dl>
 <pre class="code"><span class="dim">$ docker volume ls | grep db</span>
 <span class="hl">travelhunterapp_travelhunter-db        ← 기존 데이터가 있는 볼륨</span>
 <span class="hl">travel-hunter-onprem_travelhunter-db   ← 앱이 연결된 새 빈 볼륨</span></pre>
     </div>
     <div class="ts">
-      <b>Cloudflare Access 적용 후 GitHub Webhook 302 응답</b>
+      <b>Cloudflare Access 적용 후 GitHub Webhook에 302 응답이 발생한 문제</b>
       <dl class="kv">
-        <dt>문제</dt><dd>IP 제한 적용 후 push해도 자동 빌드가 시작되지 않고 Webhook 기록에 302 Found 반복</dd>
-        <dt class="cause">원인</dt><dd class="cause">Jenkins 전체 경로에 건 IP 제한 때문에 Webhook 요청도 Access 인증 단계로 보내짐</dd>
-        <dt>조치</dt><dd>관리자 접근 제한은 유지하고, /github-webhook/ 전용 Access Application에 GitHub hooks IP 대역만 Bypass 적용 후 Delivery 재전송</dd>
-        <dt>결과</dt><dd>Webhook 2xx 응답, Jenkins 자동 빌드 정상 완료</dd>
+        <dt>문제</dt><dd>Jenkins 관리 화면에 IP 제한을 적용한 뒤 push해도 자동 빌드가 시작되지 않았고, Webhook Recent deliveries에 302 Found 반복</dd>
+        <dt class="cause">원인</dt><dd class="cause">Jenkins 전체 경로에 적용한 IP 제한 때문에 학교 IP가 아닌 GitHub의 Webhook 요청도 Access 인증 단계로 보내져 /github-webhook/ 경로까지 전달되지 않음</dd>
+        <dt>조치</dt><dd>관리자 화면 접근 제한은 유지하고, /github-webhook/ 경로 전용 Access Application을 만들어 GitHub 공식 hooks IP 대역에만 Bypass 정책 적용</dd>
+        <dt>결과</dt><dd>실패한 Delivery를 재전송해 응답 재확인. 후속으로 Webhook Secret 서명 검증과 hooks IP 대역 변경 점검 예정</dd>
       </dl>
     </div>
 
     <h3><span class="n">05</span>배운 점</h3>
-    <p>증상과 원인을 나눠 봐야 한다는 것을 배웠습니다. "데이터 삭제"처럼 보인 장애는 볼륨 연결 문제였고, Webhook 장애는 Webhook 기록과 Access 로그를 대조하고 나서야 원인을 찾을 수 있었습니다.</p>
-    <p>처음 주도한 프로젝트에서, 서로 다른 업무를 맡은 팀원들의 작업 순서를 조율하고 작업마다 기록을 남기는 것이 꼭 필요하다는 것을 배웠습니다.</p>
-      <div class="links-row"><a class="btn" href="https://github.com/travel-hunter/travel-hunter-onprem" target="_blank" rel="noopener">GitHub ↗</a></div>
+    <p>서버 구축은 설치 명령을 실행하는 데서 끝나지 않았습니다. 스크립트로 같은 설정을 다시 적용할 수 있게 만들고 SSH·방화벽·Docker 동작을 확인해야 환경을 설명할 수 있었고, 이 경험은 Terraform으로 인프라를 코드화한 Project 02로 이어졌습니다.</p>
+    <p>Webhook 302 오류를 겪으며 관리자 접속과 자동화 요청은 목적과 출발지가 다르므로 접근 정책도 경로별로 나눠야 하고, GitHub Delivery 응답과 Jenkins 실행 결과를 함께 봐야 한다는 점을 배웠습니다.</p>
+    <p>프로젝트를 주도하며 개발·CI/CD·보안 담당자가 서로 어떤 설정에 의존하는지 파악했습니다. 도메인 연결은 팀원이, 이후 Tunnel 연결과 서버·배포 환경은 제가 맡아 작업이 끊기지 않도록 조율했습니다.</p>
+    <div class="links-row"><a class="btn" href="https://github.com/travel-hunter/travel-hunter-onprem" target="_blank" rel="noopener">GitHub ↗</a></div>
   </div>
 </dialog>
 
