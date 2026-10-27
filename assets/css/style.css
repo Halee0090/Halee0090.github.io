@@ -228,3 +228,11 @@ table.compare th.pick { background: #dbeafe; }
 .shots4 { grid-template-columns: repeat(4, 1fr); margin-top: 6px; }
 .shots4 img { aspect-ratio: 600 / 1095; object-fit: cover; object-position: top; }
 @media (max-width: 860px) { .shots4 { grid-template-columns: repeat(2, 1fr); } }
+
+.skill-list { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 4px 24px; }
+.skill-item { display: grid; grid-template-columns: 180px 1fr; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.skill-item:last-child { border-bottom: 0; }
+.skill-name { font-weight: 800; font-size: 16px; }
+.skill-item ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.skill-item li { font-size: 15px; color: #334155; }
+@media (max-width: 860px) { .skill-item { grid-template-columns: 1fr; gap: 6px; } }
