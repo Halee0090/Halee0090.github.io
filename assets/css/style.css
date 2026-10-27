@@ -123,12 +123,12 @@ code, .mono { font-family: "JetBrains Mono", Consolas, monospace; }
 .pcard .cover .metric { font-size: 26px; font-weight: 800; line-height: 1.2; }
 .sub-cards .pcard .cover .metric { font-size: 19px; }
 .pcard .cover .metric small { display: block; font-size: 13px; font-weight: 500; opacity: .85; margin-top: 4px; }
-.cover.th { background: linear-gradient(135deg, #0ea5e9, #2563eb 60%, #1e3a8a); }
-.cover.eks { background: linear-gradient(135deg, #f59e0b, #ea580c 55%, #7c2d12); }
-.cover.diet { background: linear-gradient(135deg, #34d399, #059669); }
-.cover.ids { background: linear-gradient(135deg, #64748b, #1e293b); }
-.cover.waf { background: linear-gradient(135deg, #f43f5e, #9f1239); }
-.cover.k8s { background: linear-gradient(135deg, #818cf8, #4338ca 60%, #312e81); }
+.cover.th { background: linear-gradient(135deg, #4f82c6, #3a67a6); }
+.cover.eks { background: linear-gradient(135deg, #d68b56, #b86d3e); }
+.cover.diet { background: linear-gradient(135deg, #4aa284, #31806a); }
+.cover.ids { background: linear-gradient(135deg, #6b7a90, #4d5a6e); }
+.cover.waf { background: linear-gradient(135deg, #cc6676, #ad4c5c); }
+.cover.k8s { background: linear-gradient(135deg, #7479c9, #585dab); }
 .pcard .body { padding: 18px 22px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .pcard h3 { margin: 0; font-size: 18px; }
 .sub-cards .pcard h3 { font-size: 16px; }
