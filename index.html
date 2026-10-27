@@ -253,7 +253,7 @@
     <h3><span class="n">01</span>프로젝트 소개</h3>
     <p>클라우드 네이티브 환경에서 침해 경로를 탐지하는 <b>AWS CNAPP 프로젝트</b>를 위해 AWS EKS 환경을 Terraform으로 구축하였습니다. 저는 <b>EKS 모듈</b>을 담당했으며, VPC와 IAM 모듈은 팀원들과 협업해 작성했습니다.</p>
     <figure>
-      <img src="assets/img/eks-architecture.png" alt="AWS EKS 인프라 구성도 · Terraform 모듈, VPC 2 AZ Public/Private Subnet, EKS Control Plane, Private Subnet의 Worker Node, IAM·IRSA, CloudWatch Logs" loading="lazy">
+      <img src="assets/img/eks-architecture.png" alt="AWS EKS 인프라 구성도 · us-east-1 VPC 10.0.0.0/16, 2개 AZ의 Public Subnet(NAT Gateway)과 Private Subnet(Worker Node), EKS Control Plane, CloudWatch Logs, IAM" loading="lazy">
     </figure>
 
     <h3><span class="n">02</span>배경과 목적</h3>
