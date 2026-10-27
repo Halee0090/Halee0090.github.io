@@ -12,17 +12,14 @@
 
 <!-- ================= HERO ================= -->
 <header class="hero">
-  <div class="wrap hero-grid">
+  <div class="wrap hero-row">
+    <img class="profile" src="assets/img/profile.jpg" alt="이하은 증명사진" width="160" height="213">
     <div>
       <div class="role">CLOUD · INFRA ENGINEER</div>
-      <h1>이하은<small>증상과 원인을 구분하고, 로그로 근거를 확인하는 엔지니어</small></h1>
+      <h1>이하은<small>장애 원인을 빠르게 파악하고 대응하는 클라우드 엔지니어 지원자</small></h1>
       <div class="tags">
         <span>Terraform</span><span>AWS EKS</span><span>Docker</span><span>Jenkins</span><span>Cloudflare</span><span>Linux</span>
       </div>
-    </div>
-    <div class="terminal" aria-label="자기소개 터미널">
-      <div class="bar"><i></i><i></i><i></i></div>
-      <pre id="typed" aria-live="off"></pre>
     </div>
   </div>
 </header>
@@ -43,21 +40,27 @@
   <div class="wrap">
 
     <div class="block">
-      <div class="panel-head"><div class="kicker">HOW I WORK</div><h2>이렇게 일합니다</h2></div>
+      <div class="panel-head"><div class="kicker">ATTITUDE</div><h2>이런 태도를 가진 지원자입니다</h2></div>
       <div class="principles">
-        <div class="principle"><div class="n">01 / 근거</div><h3>증상과 원인을 구분합니다</h3><p>"데이터가 사라졌다"는 증상 뒤의 볼륨 연결 문제처럼, 로그와 데이터로 원인을 확인한 뒤 조치합니다.</p></div>
-        <div class="principle"><div class="n">02 / 선택</div><h3>대안을 비교해 고릅니다</h3><p>ngrok과 Cloudflare Tunnel처럼 처음 쓰는 기술도 비용·주소·보안을 비교해 고르고 직접 적용합니다.</p></div>
-        <div class="principle"><div class="n">03 / 재현</div><h3>같은 상태를 코드로 만듭니다</h3><p>Shell Script로 서버 초기 설정을, Terraform으로 AWS 인프라를 코드화해 누구나 같은 환경을 만들 수 있게 합니다.</p></div>
+        <div class="principle"><div class="n">01 / 근거</div><h3>로그로 원인을 확인한 뒤 조치합니다</h3><p>재배포 후 데이터가 사라졌을 때 증상만 보고 고치지 않고, 볼륨 목록과 로그로 새 볼륨에 연결된 원인을 찾은 뒤 복구했습니다.</p></div>
+        <div class="principle"><div class="n">02 / 주도</div><h3>필요한 일을 먼저 찾아 제안합니다</h3><p>학교 네트워크 때문에 외부 접속이 막히자 Cloudflare Tunnel을 직접 조사해 팀에 제안했고, 부트캠프에서는 동기들에게 데이터 콘테스트 참가를 먼저 제안했습니다.</p></div>
+        <div class="principle"><div class="n">03 / 연관</div><h3>바꾼 것의 영향까지 확인합니다</h3><p>Jenkins 접근 제한이 Webhook까지 막은 경험 이후, 설정을 바꿀 때는 연결된 서비스와 담당 팀원의 작업까지 함께 점검합니다.</p></div>
       </div>
     </div>
 
     <div class="block">
-      <div class="panel-head"><div class="kicker">JOURNEY</div><h2>여기까지 왔습니다</h2></div>
-      <div class="journey">
-        <div><div class="when">2018 – 2023</div><div class="what">공주대학교</div><div class="desc">관광영어통역 · 국제통상 복수전공</div></div>
-        <div><div class="when">2023 – 2024</div><div class="what">미국 물류회사 인턴</div><div class="desc">사내 운송기록 관리 프로그램 도입에 참여</div></div>
-        <div><div class="when">2024</div><div class="what">플레이데이터 부트캠프</div><div class="desc">빅데이터·MLOps · 처음 AWS 배포를 경험</div></div>
-        <div><div class="when">2026 – 현재</div><div class="what">한국폴리텍대학</div><div class="desc">서울정수캠퍼스 클라우드컴퓨팅 과정</div></div>
+      <div class="panel-head"><div class="kicker">BACKGROUND</div><h2>학력 · 해외경험 · 교육연수</h2></div>
+      <div class="bg-groups">
+        <div class="bg-group"><div class="bg-title">학력</div>
+          <div class="bg-item"><div class="when">2018.03 – 2023.02</div><div class="what">공주대학교</div><div class="desc">관광영어통역학과 졸업 · 국제통상학과 복수전공</div></div>
+        </div>
+        <div class="bg-group"><div class="bg-title">해외경험</div>
+          <div class="bg-item"><div class="when">2023 – 2024</div><div class="what">미국 물류회사 인턴</div><div class="desc">사내 운송기록 관리 프로그램 도입에 참여, IT 담당자에게 버그와 필요한 기능 전달</div></div>
+        </div>
+        <div class="bg-group"><div class="bg-title">교육연수</div>
+          <div class="bg-item"><div class="when">2026.03 – 2026.12 (수료 예정)</div><div class="what">한국폴리텍대학 서울정수캠퍼스</div><div class="desc">클라우드컴퓨팅 과정</div></div>
+          <div class="bg-item"><div class="when">2024</div><div class="what">플레이데이터 부트캠프</div><div class="desc">빅데이터·MLOps · 처음 AWS 배포를 경험</div></div>
+        </div>
       </div>
     </div>
 
