@@ -333,20 +333,19 @@
   <div class="content">
     <h3><span class="n">01</span>프로젝트 소개</h3>
     <p>Kali–Sensor–Victim 실습망에서 Suricata IDS 규칙 3개를 작성하고, 경보가 가리키는 패킷과 서버에 도달한 요청을 로그로 검증한 개인 프로젝트입니다.</p>
-    <figure><img src="assets/img/suricata-network.png" alt="실습망 구성도" loading="lazy"><figcaption>Kali(공격) → Sensor(라우팅 · Suricata · tcpdump) → Victim(Nginx · SSH)</figcaption></figure>
+    <figure><img src="assets/img/suricata-network-v2.png" alt="실습망 구성도 · Kali Linux(10.10.10.10) → VMnet2 → Sensor(10.10.10.1/10.10.20.1, 라우팅·Suricata·tcpdump) → VMnet3 → Victim(10.10.20.20, Nginx·SSH)" loading="lazy"></figure>
 
     <h3><span class="n">02</span>배경과 목적</h3>
     <dl class="kv">
       <dt>배경</dt><dd>네트워크 기초 수업에서 배운 IDS를 직접 구성해, 발생시킨 트래픽이 어떤 조건에서 경보로 기록되는지 확인하고 싶었습니다. 경보만으로는 어떤 패킷이 규칙에 걸렸는지, 요청이 서버에 도달했는지 판단하기 어려웠습니다.</dd>
-      <dt>목적</dt><dd>① 직접 작성한 규칙으로 트래픽이 탐지되는지 확인 ② 경보를 패킷과 서버 로그로 설명할 수 있는 환경 구성</dd>
+      <dt>목적</dt><dd>① 직접 작성한 규칙으로 트래픽이 탐지되는지 확인 ② Suricata 경보를 서버 로그, 패킷과 대조하여 분석</dd>
     </dl>
 
     <h3><span class="n">03</span>주요 작업</h3>
     <ol class="steps">
       <li><b><span>1</span>실습망 구성</b><p>Kali망(10.10.10.0/24)과 Victim망(10.10.20.0/24)을 분리하고, Sensor에 IP Forwarding을 설정해 모든 트래픽이 감시 구간을 지나도록 했습니다. Victim에는 Nginx와 SSH를 설치하고 UFW로 80번 Open, 81번 Closed, 82번 Filtered 상태를 만들었습니다.</p></li>
       <li><b><span>2</span>탐지 규칙 작성</b><p>ICMP Echo Request, 짧은 시간에 반복되는 TCP SYN, HTTP User-Agent의 LAB-SCANNER 문자열을 탐지하는 규칙 3개를 작성하고 suricata -T로 설정을 검사했습니다.</p></li>
-      <li><b><span>3</span>6개 시나리오 검증</b><p>ICMP·포트 상태·스캔 방식·HTTP·웹 경로 탐색·SSH 시나리오마다 경보 → 패킷(PCAP) → 서버 로그 순으로 근거를 대조했습니다.</p></li>
-      <li><b><span>4</span>결과</b><p>의심 HTTP 요청은 경보(SID 1000003)가 발생했지만 action이 allowed로 차단되지 않고 Nginx 로그에 남아 서버에 도달했습니다. 웹 경로 탐색은 규칙이 없어 기록만 남고 경보는 발생하지 않았습니다.</p></li>
+      <li><b><span>3</span>6개 시나리오 검증</b><p>ICMP, 포트 상태, 스캔 방식, HTTP, 웹 경로 탐색, SSH 시나리오별로 경보 → 패킷 → 서버 로그 순으로 근거를 대조했습니다.</p></li>
     </ol>
 
     <h3><span class="n">04</span>트러블슈팅</h3>
@@ -361,8 +360,8 @@
     </div>
 
     <h3><span class="n">05</span>배운 점</h3>
-    <p>트래픽이 기록되는 것과 규칙에 의해 경보가 발생하는 것은 다르다는 것을 확인했습니다. 탐지 결과를 설명할 때는 규칙과 경보 → 패킷 → 서버 로그 순으로 근거를 확인해야 한다는 것을 배웠습니다.</p>
-    <p>다음 단계로 정상 트래픽을 다양하게 발생시켜 오탐 여부를 확인하고, IPS 차단 기능도 별도로 검증할 계획입니다.</p>
+    <p>트래픽이 기록되는 것과 규칙에 의해 경보가 발생하는 것은 다르다는 것을 확인했습니다. 탐지 결과를 설명할 때는 규칙과 경보 → 패킷 → 서버 로그 순으로 근거를 확인해야 한다는 것을 배웠습니다. 또한 규칙이 느슨하면 오탐이, 엄격하면 미탐이 늘어난다는 것을 알게 되었습니다.</p>
+    <p>다음 단계로 IPS 차단 기능을 별도로 검증할 계획입니다. 새 규칙을 처음부터 drop으로 설정하지 않고 alert로 운영해 오탐을 확인한 뒤 차단으로 바꾸는 방식으로 진행할 예정입니다.</p>
   </div>
 </dialog>
 
