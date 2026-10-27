@@ -202,11 +202,10 @@
   <div class="content">
     <h3><span class="n">01</span>프로젝트 소개</h3>
     <p>국내 여행 정책·혜택을 찾아 여행 일정을 계획하는 서비스입니다. 5명이 2026년 6월부터 함께 작업하고 있고, 저는 프로젝트를 주도하며 <b>인프라 구축, CI/CD 배포 자동화, CI/CD 보안</b>을 맡았습니다. 현재는 클라우드로 마이그레이션을 진행하고 있습니다.</p>
-    <div class="shots">
-      <img src="assets/img/th-login.png" alt="로그인 화면" loading="lazy">
-      <img src="assets/img/th-region.png" alt="관심 지역 혜택 화면" loading="lazy">
-      <img src="assets/img/th-map.png" alt="지도 기반 혜택 탐색 화면" loading="lazy">
-    </div>
+    <figure>
+      <img src="assets/img/th-architecture-v2.png" alt="TravelHunter 시스템 구성도" loading="lazy">
+      <figcaption>시스템 구성도 · 사용자 요청은 Cloudflare와 Caddy를 거쳐 FastAPI로 들어오고, Jenkins가 빌드 · DB 마이그레이션 · 재시작을 수행</figcaption>
+    </figure>
 
     <h3><span class="n">02</span>프로젝트 개요</h3>
     <table class="compare ps">
@@ -218,11 +217,6 @@
         <tr><td>Jenkins 관리자 화면이 외부에 노출됨</td><td class="pick">Cloudflare Access로 허가된 팀원만 접근</td></tr>
       </tbody>
     </table>
-    <figure>
-      <img src="assets/img/th-architecture.png" alt="TravelHunter 시스템 구성도" loading="lazy">
-      <figcaption>사용자 요청은 Cloudflare Tunnel과 Caddy를 거쳐 앱으로 들어오고, Jenkins가 빌드 · DB 마이그레이션 · 컨테이너 재시작을 수행</figcaption>
-    </figure>
-
     <h3><span class="n">03</span>주요 작업</h3>
     <ol class="steps">
       <li><b><span>1</span>개발·운영 서버 인프라 구축</b><p>학교 서버 WSL(Ubuntu 24.04) 환경에 SSH, 사용자·권한, 호스트명, 시간대, UFW, Docker를 설정하고 개발·운영 2개 환경의 역할 분리</p><p class="check">✔ SSH 접속, 방화벽 상태, Docker 서비스와 테스트 컨테이너 실행</p></li>
