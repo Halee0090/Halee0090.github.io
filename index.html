@@ -256,16 +256,11 @@
       <img src="assets/img/eks-architecture.png" alt="AWS EKS 인프라 구성도 · Terraform 모듈, VPC 2 AZ Public/Private Subnet, EKS Control Plane, Private Subnet의 Worker Node, IAM·IRSA, CloudWatch Logs" loading="lazy">
     </figure>
 
-    <h3><span class="n">02</span>프로젝트 개요</h3>
-    <table class="compare ps">
-      <thead><tr><th>문제</th><th class="pick">해결</th></tr></thead>
-      <tbody>
-        <tr><td>프로젝트 후반에 배포 전 Terraform 코드 보안 점검 단계가 있음</td><td class="pick">인프라 전체를 코드로 관리하고 Region·Subnet ID 하드코딩 제거</td></tr>
-        <tr><td>3명이 같은 인프라 코드를 동시에 수정해야 함</td><td class="pick">VPC / IAM / IRSA / EKS 모듈로 나눠 담당자별 분업</td></tr>
-        <tr><td>Worker Node가 외부에 노출되면 공격 표면이 커짐</td><td class="pick">Private Subnet에만 배치, Public IP 없이 구성하고 EBS 암호화</td></tr>
-        <tr><td>클러스터에서 무슨 일이 있었는지 추적할 근거가 필요함</td><td class="pick">Control Plane 로그 5종을 CloudWatch로 수집</td></tr>
-      </tbody>
-    </table>
+    <h3><span class="n">02</span>배경과 목적</h3>
+    <dl class="kv">
+      <dt>배경</dt><dd>공격 경로를 재현하고 검증하려면 팀 전체가 사용할 EKS 환경이 먼저 필요했습니다. AWS 콘솔에서 인프라를 구성해보고, 그 구성을 그대로 Terraform 코드로 작성하여 구성해보았습니다.</dd>
+      <dt>목적</dt><dd>① 수업에서 배운 IaC를 VPC·IAM·EKS 실제 환경에 적용 ② 3명이 모듈 단위로 충돌 없이 분업</dd>
+    </dl>
 
     <h3><span class="n">03</span>주요 작업</h3>
     <ol class="steps">
