@@ -73,7 +73,7 @@
           <h3>Cloud · IaC</h3>
           <div class="skill-row"><span>AWS (EKS · VPC · IAM · WAF)</span><span class="level l2"><i></i><i></i><i></i></span></div>
           <div class="skill-row"><span>Terraform</span><span class="level l2"><i></i><i></i><i></i></span></div>
-          <div class="skill-row"><span>Kubernetes</span><span class="level l1"><i></i><i></i><i></i></span></div>
+          <div class="skill-row"><span>Kubernetes (kubeadm · EKS)</span><span class="level l2"><i></i><i></i><i></i></span></div>
           <div class="skill-row"><span>Ncloud (NCP)</span><span class="level l1"><i></i><i></i><i></i></span></div>
         </div>
         <div class="skill-group">
@@ -156,6 +156,10 @@
         <button class="pcard" data-open="m-waf" aria-haspopup="dialog">
           <div class="cover waf"><div class="metric">SQLi 차단 전후 비교<small>ALB + Web ACL</small></div></div>
           <div class="body"><h3>AWS WAF 기반 DVWA 공격 차단</h3><div class="meta">수업 실습 · 2026.09 ~ 10</div><span class="more">자세히 보기 →</span></div>
+        </button>
+        <button class="pcard" data-open="m-k8s" aria-haspopup="dialog">
+          <div class="cover k8s"><div class="metric">무중단 배포 · 백업 복구<small>Ingress(TLS) · PVC · HPA</small></div></div>
+          <div class="body"><h3>온프레미스 쿠버네티스 웹·DB 배포 및 운영</h3><div class="meta">수업 종합 실습 · 2026.10</div><span class="more">자세히 보기 →</span></div>
         </button>
       </div>
     </div>
@@ -430,6 +434,55 @@ irsa/oidc-lbc-irsa         ← EKS 생성 후, 즉시 필요
       <img src="assets/img/waf-after.png" alt="WAF 적용 후 차단 페이지">
     </div>
     -->
+  </div>
+</dialog>
+
+<!-- Kubernetes -->
+<dialog class="detail" id="m-k8s" aria-labelledby="m-k8s-title">
+  <div class="head cover k8s">
+    <div class="label">MORE</div>
+    <h2 id="m-k8s-title">온프레미스 쿠버네티스 웹·DB 배포 및 운영</h2>
+    <div class="meta">수업 종합 실습 · 2026.10 · Kubernetes(kubeadm) · Ingress(TLS) · ConfigMap · Secret · PVC · HPA · MySQL</div>
+    <button class="close" aria-label="닫기">×</button>
+  </div>
+  <div class="content">
+    <h3><span class="n">01</span>소개</h3>
+    <p>웹과 주문 DB로 구성된 쇼핑몰 서비스를 온프레미스 쿠버네티스 클러스터에 배포하고, 배포 후 운영 작업(Day-2)까지 직접 수행한 실습입니다.</p>
+    <dl class="kv">
+      <dt>요구사항</dt><dd>① 웹 서버는 무중단 배포와 자동 확장 ② 주문 DB는 Pod가 재시작되어도 데이터 유지 ③ HTTPS로 서비스 공개</dd>
+    </dl>
+<pre class="code"><span class="dim"># 구성</span>
+[사용자] → Ingress (HTTPS · TLS Secret)
+         → Service web-svc → Deployment web (nginx ×2, HPA 2~5)  ← ConfigMap
+           Service db-svc  → Deployment db  (mysql ×1)           ← ConfigMap · Secret
+                                    ↓
+                             <span class="hl">PVC db-pvc (StorageClass local-path, 동적 생성)</span></pre>
+
+    <h3><span class="n">02</span>주요 작업</h3>
+    <ol class="steps">
+      <li><b><span>1</span>설정과 비밀 정보 분리</b><p>DB 이름·사용자는 ConfigMap, DB 비밀번호와 TLS 인증서는 Secret으로 분리해 YAML에 평문으로 남기지 않음</p></li>
+      <li><b><span>2</span>DB 배포 (PVC + Recreate)</b><p>동적 PVC(1Gi, RWO)를 /var/lib/mysql에 연결. RollingUpdate를 쓰면 새 Pod와 기존 Pod가 같은 데이터 폴더를 동시에 쓰게 되므로 Recreate 전략 적용</p></li>
+      <li><b><span>3</span>웹 배포 (무중단 업데이트 + 자동 확장)</b><p>RollingUpdate(maxSurge 1, maxUnavailable 0)로 기존 Pod를 먼저 내리지 않도록 설정. requests/limits를 지정하고 CPU 50% 기준 HPA(2~5) 적용</p></li>
+      <li><b><span>4</span>HTTPS 공개</b><p>자체 서명 인증서로 TLS Secret을 만들고, Ingress에서 도메인 → web-svc로 연결</p></li>
+    </ol>
+
+    <h3><span class="n">03</span>운영 검증 (Day-2)</h3>
+    <div class="ts">
+      <b>DB 재시작</b>
+      <dl class="kv"><dt>방법</dt><dd>주문 3건 입력 후 rollout restart</dd><dt>결과</dt><dd>새 Pod에서도 3건 유지, PV가 저장된 노드·경로 확인</dd></dl>
+    </div>
+    <div class="ts">
+      <b>운영자 실수 복구</b>
+      <dl class="kv"><dt>방법</dt><dd>mysqldump로 백업 → DROP TABLE로 사고 재현 → 백업 파일로 복구</dd><dt>결과</dt><dd>삭제된 주문 테이블 복구</dd></dl>
+    </div>
+    <div class="ts">
+      <b>무중단 버전 업데이트</b>
+      <dl class="kv"><dt>방법</dt><dd>0.5초마다 요청을 보내며 nginx 1.27 → 1.28 배포</dd><dt>결과</dt><dd>업데이트 중 200 응답만 확인, change-cause로 배포 이력 기록</dd></dl>
+    </div>
+
+    <h3><span class="n">04</span>배운 점</h3>
+    <p>PVC는 Pod 장애로부터 데이터를 지켜 주지만, 잘못된 명령까지 막아 주지는 못한다는 것을 테이블 삭제 사고를 재현하며 확인했습니다. 데이터 유지와 백업은 별개의 문제였습니다.</p>
+    <p>같은 Deployment라도 웹은 RollingUpdate, DB는 Recreate처럼 데이터를 다루는 방식에 따라 배포 전략을 다르게 골라야 한다는 것을 배웠습니다.</p>
   </div>
 </dialog>
 

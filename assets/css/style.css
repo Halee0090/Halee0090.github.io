@@ -109,7 +109,7 @@ code, .mono { font-family: "JetBrains Mono", Consolas, monospace; }
 
 /* ================= PROJECT CARDS ================= */
 .main-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-.sub-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.sub-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
 .pcard {
   all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column;
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
@@ -128,6 +128,7 @@ code, .mono { font-family: "JetBrains Mono", Consolas, monospace; }
 .cover.diet { background: linear-gradient(135deg, #34d399, #059669); }
 .cover.ids { background: linear-gradient(135deg, #64748b, #1e293b); }
 .cover.waf { background: linear-gradient(135deg, #f43f5e, #9f1239); }
+.cover.k8s { background: linear-gradient(135deg, #818cf8, #4338ca 60%, #312e81); }
 .pcard .body { padding: 18px 22px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .pcard h3 { margin: 0; font-size: 18px; }
 .sub-cards .pcard h3 { font-size: 16px; }

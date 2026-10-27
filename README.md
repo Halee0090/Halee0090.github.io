@@ -45,9 +45,3 @@ GitHub Pages로 배포하는 정적 포트폴리오 사이트입니다. 빌드 �
 
 - 공개 저장소의 Pages는 누구나 볼 수 있습니다. 실습 중 캡처에 **IP, 계정 ID, 도메인, 토큰**이 보이지 않는지 확인하세요.
 - 팀 프로젝트 화면·자료를 올릴 때는 팀원 동의를 받아 두는 것이 좋습니다.
-
-## PetClinic 섹션 추가 (실습 완료 후)
-
-1. Project 탭 `main-cards` 안에 카드(`<button class="pcard" data-open="m-pc">`)를 하나 더 추가
-2. 파일 아래쪽 모달 영역에 `<dialog class="detail" id="m-pc">` 를 EKS 모달을 복사해 만들기
-3. About 탭 Skills의 Kubernetes 막대를 `level l1 → l2` 로 변경
