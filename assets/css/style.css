@@ -261,3 +261,9 @@ table.compare th.pick { background: #dbeafe; }
 @media (max-width: 480px) {
   .hero-row { flex-direction: column; align-items: flex-start; }
 }
+
+/* 전/후 비교 이미지 2장 */
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; align-items: start; }
+.pair figure { margin: 0; }
+.pair img { width: 100%; border: 1px solid var(--line); border-radius: 10px; }
+@media (max-width: 640px) { .pair { grid-template-columns: 1fr; } }
