@@ -266,4 +266,5 @@ table.compare th.pick { background: #dbeafe; }
 .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; align-items: start; }
 .pair figure { margin: 0; }
 .pair img { width: 100%; border: 1px solid var(--line); border-radius: 10px; }
+.pair.eq img { aspect-ratio: 886 / 759; object-fit: contain; background: #fff; padding: 6px; }
 @media (max-width: 640px) { .pair { grid-template-columns: 1fr; } }
