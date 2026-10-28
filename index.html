@@ -140,7 +140,7 @@
         </button>
         <button class="pcard" data-open="m-k8s" aria-haspopup="dialog">
           <div class="cover k8s"><div class="metric">무중단 배포 · 백업 복구<small>Ingress(TLS) · PVC · HPA</small></div></div>
-          <div class="body"><h3>온프레미스 쿠버네티스 웹·DB 배포 및 운영</h3><div class="meta">수업 종합 실습 · 2026.10</div><span class="more">자세히 보기 →</span></div>
+          <div class="body"><h3>온프레미스 쿠버네티스 웹·DB 배포 및 운영</h3><div class="meta">개인 · 2026.10</div><span class="more">자세히 보기 →</span></div>
         </button>
       </div>
     </div>
@@ -414,27 +414,27 @@
   <div class="head cover k8s">
     <div class="label">MORE</div>
     <h2 id="m-k8s-title">온프레미스 쿠버네티스 웹·DB 배포 및 운영</h2>
-    <div class="meta">수업 종합 실습 · 2026.10.26 · Kubernetes(kubeadm) · Ingress(TLS) · ConfigMap · Secret · PVC · HPA · MySQL</div>
+    <div class="meta">개인 · 2026.10 · Kubernetes(kubeadm) · Ingress(TLS) · ConfigMap · Secret · PVC · HPA · MySQL</div>
     <button class="close" aria-label="닫기">×</button>
   </div>
   <div class="content">
     <h3><span class="n">01</span>프로젝트 소개</h3>
-    <p>사내 쇼핑몰 K-Shop을 온프레미스 쿠버네티스 클러스터에 배포하고, 운영팀 입장에서 DB 백업·복구와 무중단 버전 업데이트 같은 운영 작업(Day-2)까지 수행한 수업 종합 실습입니다.</p>
+    <p>쇼핑몰 웹을 온프레미스 쿠버네티스 클러스터에 배포하고, 운영팀 입장에서 DB 백업·복구와 무중단 버전 업데이트 같은 운영 작업까지 수행한 개인 프로젝트입니다.</p>
     <figure><img src="assets/img/k8s-architecture.png" alt="K-Shop 쿠버네티스 구성도: 사용자 → Ingress(TLS) → web-svc → Deployment web(nginx×2, HPA 2~5), db-svc → Deployment db(mysql×1) → PVC db-pvc(local-path), ConfigMap·Secret 주입" loading="lazy"></figure>
 
     <h3><span class="n">02</span>배경과 목적</h3>
     <dl class="kv">
-      <dt>배경</dt><dd>StorageClass를 이용한 동적 프로비저닝과 PV/PVC를 배운 뒤, 지금까지 배운 쿠버네티스 오브젝트를 종합해 실제 서비스처럼 오픈하고 운영해 보는 실습이었습니다.</dd>
+      <dt>배경</dt><dd>폴리텍대학교 클라우드 모니터링 수업에서 배운 쿠버네티스 오브젝트를 종합해 실제 서비스처럼 오픈하고 운영해 보았습니다.</dd>
       <dt>목적</dt><dd>① 웹 서버는 무중단 배포와 자동 확장 ② 주문 DB는 Pod가 재시작되어도 데이터 유지 ③ HTTPS로 서비스 공개</dd>
     </dl>
 
     <h3><span class="n">03</span>주요 작업</h3>
     <ol class="steps">
-      <li><b><span>1</span>사전 점검</b><p>배포 전에 노드 상태, Ingress Controller, 기본 StorageClass(local-path), metrics-server가 준비되어 있는지 확인했습니다.</p></li>
-      <li><b><span>2</span>설정과 비밀 정보 분리</b><p>DB 이름·사용자와 웹 페이지는 ConfigMap, DB 비밀번호는 Secret으로 분리했습니다. openssl로 자체 서명 인증서를 만들어 TLS Secret으로 등록했습니다.</p></li>
-      <li><b><span>3</span>DB 배포 (PVC + Recreate)</b><p>동적 PVC(1Gi, RWO)를 /var/lib/mysql에 연결했습니다. RollingUpdate를 쓰면 새 Pod와 기존 Pod가 같은 데이터 폴더를 동시에 쓰게 되므로 Recreate 전략을 적용하고, requests/limits를 지정했습니다.</p></li>
+      <li><b><span>1</span>사전 점검</b><p>노드, Ingress Controller, 기본 StorageClass(local-path), metrics-server의 준비 상태를 확인했습니다.</p></li>
+      <li><b><span>2</span>설정과 비밀 정보 분리</b><p>ConfigMap과 Secret을 분리하고, openssl로 자체 서명 인증서를 만들어 TLS Secret으로 등록했습니다.</p></li>
+      <li><b><span>3</span>DB 배포</b><p>동적 PVC를 연결하고, Recreate 전략과 requests/limits를 지정했습니다.</p></li>
       <li><b><span>4</span>웹 배포 (무중단 업데이트 + 자동 확장)</b><p>RollingUpdate(maxSurge 1, maxUnavailable 0)로 기존 Pod를 먼저 내리지 않도록 하고, change-cause로 배포 이력을 남겼습니다. CPU 50% 기준 HPA(2~5)를 적용하고, Ingress로 shop.example.com을 HTTPS로 공개했습니다.</p></li>
-      <li><b><span>5</span>운영 검증 (Day-2)</b><p>DB Pod를 재시작해도 주문 3건이 유지되는지 확인했습니다. mysqldump 백업 후 DROP TABLE로 사고를 재현해 백업으로 복구했고, 0.5초마다 요청을 보내며 nginx 1.27 → 1.28로 업데이트해 200 응답만 나오는 것을 확인했습니다.</p></li>
+      <li><b><span>5</span>운영 검증</b><p>DB를 재시작한 뒤 데이터가 유지되는지 확인하고, 백업 → 사고 재현(DB 테이블 실수로 삭제) → 복구를 진행했습니다. 웹 서버를 무중단으로 버전 업데이트하며 사용자 요청이 실패하지 않는지 확인했습니다.</p></li>
     </ol>
 
     <h3><span class="n">04</span>배운 점</h3>
