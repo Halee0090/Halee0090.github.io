@@ -433,8 +433,8 @@
       <li><b><span>1</span>사전 점검</b><p>노드, Ingress Controller, 기본 StorageClass(local-path), metrics-server의 준비 상태를 확인했습니다.</p></li>
       <li><b><span>2</span>설정과 비밀 정보 분리</b><p>ConfigMap과 Secret을 분리하고, openssl로 자체 서명 인증서를 만들어 TLS Secret으로 등록했습니다.</p></li>
       <li><b><span>3</span>DB 배포</b><p>동적 PVC를 연결하고, Recreate 전략과 requests/limits를 지정했습니다.</p></li>
-      <li><b><span>4</span>웹 배포 (무중단 업데이트 + 자동 확장)</b><p>RollingUpdate(maxSurge 1, maxUnavailable 0)로 기존 Pod를 먼저 내리지 않도록 하고, change-cause로 배포 이력을 남겼습니다. CPU 50% 기준 HPA(2~5)를 적용하고, Ingress로 shop.example.com을 HTTPS로 공개했습니다.</p></li>
-      <li><b><span>5</span>운영 검증</b><p>DB를 재시작한 뒤 데이터가 유지되는지 확인하고, 백업 → 사고 재현(DB 테이블 실수로 삭제) → 복구를 진행했습니다. 웹 서버를 무중단으로 버전 업데이트하며 사용자 요청이 실패하지 않는지 확인했습니다.</p></li>
+      <li><b><span>4</span>웹 배포</b><p>RollingUpdate로 기존 Pod를 먼저 내리지 않도록 하고, change-cause로 배포 이력을 남겼습니다.</p></li>
+      <li><b><span>5</span>운영 검증</b><p>DB를 재시작한 뒤 데이터가 유지되는지 확인하고, DB를 백업해 둔 뒤 DB 테이블을 실수로 삭제해 보고 복구를 진행하여 대응해 보았습니다. 또한 웹 서버 버전 업데이트를 시도하여 사용자 요청이 실패하지 않는지 확인했습니다.</p></li>
     </ol>
 
     <h3><span class="n">04</span>배운 점</h3>
