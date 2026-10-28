@@ -375,29 +375,30 @@
   <div class="head cover waf">
     <div class="label">MORE</div>
     <h2 id="m-waf-title">AWS WAF 기반 DVWA 웹 공격 차단</h2>
-    <div class="meta">폴리텍 수업 실습 · 2026.09 ~ 10 · AWS WAF · ALB · EC2 · Docker · CloudWatch Logs Insights</div>
+    <div class="meta">폴리텍 수업 실습 · 2026.09.16 ~ 2026.10.07 · AWS WAF · ALB · EC2 · Docker · CloudWatch Logs Insights</div>
     <button class="close" aria-label="닫기">×</button>
   </div>
   <div class="content">
     <h3><span class="n">01</span>프로젝트 소개</h3>
-    <p>취약한 웹 앱(DVWA)을 ALB 뒤에 배포하고, 같은 공격이 AWS WAF 적용 전후로 어떻게 달라지는지 확인한 실습입니다.</p>
+    <p>취약한 웹 앱(DVWA)을 EC2에 Docker로 배포해 ALB 뒤에 두고, 같은 공격이 AWS WAF 적용 전후로 어떻게 달라지는지 비교한 수업 실습입니다.</p>
 
     <h3><span class="n">02</span>배경과 목적</h3>
     <dl class="kv">
-      <dt>배경</dt><dd>폴리텍 클라우드 보안 수업에서 AWS WAF를 실습했습니다. 취약한 웹 앱을 그대로 노출했을 때와 WAF를 적용했을 때의 차이를 같은 공격으로 비교했습니다.</dd>
-      <dt>목적</dt><dd>① WAF 적용 전후 같은 공격의 결과 비교 ② WAF 로그를 CloudWatch로 수집해 차단 내역 확인</dd>
+      <dt>배경</dt><dd>폴리텍 클라우드 보안 수업에서 웹 애플리케이션 방화벽을 배우며, 취약한 웹 앱을 그대로 노출했을 때와 WAF를 적용했을 때의 차이를 직접 확인했습니다.</dd>
+      <dt>목적</dt><dd>① SQL Injection·Command Injection이 실제로 어떤 정보를 노출하는지 확인 ② AWS WAF 규칙으로 공격 요청을 앞단에서 차단 ③ WAF 로그를 CloudWatch로 수집해 차단 내역 분석</dd>
     </dl>
 
     <h3><span class="n">03</span>주요 작업</h3>
     <ol class="steps">
-      <li><b><span>1</span>DVWA 배포</b><p>EC2(Amazon Linux)에 Docker로 DVWA 컨테이너를 배포하고 ALB 대상 그룹으로 연결했습니다.</p></li>
-      <li><b><span>2</span>WAF 적용 전 공격</b><p>SQL Injection으로 전체 계정 정보가, Command Injection으로 /etc/passwd가 노출되는 것을 확인했습니다.</p></li>
-      <li><b><span>3</span>Web ACL 적용</b><p>ALB에 Web ACL을 연결해 SQLi·XSS 규칙을 적용하고, 차단 시 사용자 정의 Access Denied 페이지로 응답하도록 했습니다.</p></li>
-      <li><b><span>4</span>로그 확인</b><p>WAF 로그를 CloudWatch로 수집해 대시보드와 Logs Insights 쿼리(최근 요청, 요청 상위 IP)로 확인했습니다. 같은 SQL Injection 요청이 애플리케이션에 도달하지 않고 WAF에서 차단됐습니다.</p></li>
+      <li><b><span>1</span>DVWA 배포</b><p>Amazon Linux EC2에 Docker를 설치하고 DVWA 이미지 2종(sagikazarmark/dvwa, vulnerables/web-dvwa)을 각각 80·8080 포트로 배포해 비교했습니다. 보안 레벨을 impossible에서 low로 낮춰 취약한 상태로 만들었습니다.</p></li>
+      <li><b><span>2</span>WAF 적용 전 공격</b><p>SQL Injection(' or 1=1 #)으로 전체 계정 정보가, Command Injection(8.8.8.8 &amp;&amp; cat /etc/passwd)으로 서버의 계정 파일이 노출되는 것을 확인했습니다.</p></li>
+      <li><b><span>3</span>ALB·Web ACL 구성</b><p>대상 그룹과 ALB를 만들어 DVWA를 연결하고, ALB에 Web ACL을 붙여 SQLi·XSS 규칙을 적용했습니다. 차단 시에는 사용자 정의 Access Denied 페이지로 응답하도록 했습니다.</p></li>
+      <li><b><span>4</span>로그 수집·분석</b><p>CloudFormation 템플릿으로 WAF 대시보드를 만들고, WAF 로그를 CloudWatch Logs Insights 쿼리(최근 요청 20건, 요청 상위 IP)로 분석했습니다. 같은 SQL Injection 요청이 애플리케이션에 도달하지 않고 WAF에서 차단된 것을 확인했습니다.</p></li>
     </ol>
 
     <h3><span class="n">04</span>배운 점</h3>
-    <p>애플리케이션 코드를 고치지 않아도 앞단의 WAF에서 공격 요청을 걸러낼 수 있다는 것을 확인했습니다. 또한 CloudWatch 로그로 어떤 요청이 언제, 어디서 차단됐는지 근거를 남길 수 있다는 것을 배웠습니다.</p>
+    <p>WAF 적용 전에는 입력창 한 줄로 계정 정보와 서버 파일이 노출됐지만, Web ACL을 연결한 뒤에는 같은 요청이 애플리케이션에 도달하기 전에 차단됐습니다. 애플리케이션 코드를 고치지 않아도 앞단에서 공격 요청을 걸러낼 수 있다는 것을 확인했습니다.</p>
+    <p>다만 WAF는 규칙에 맞는 요청만 막기 때문에, 애플리케이션의 입력값 검증도 함께 필요하다는 것을 알게 됐습니다. 또한 CloudWatch 로그로 어떤 IP에서 어떤 요청이 차단됐는지 근거를 남길 수 있었습니다.</p>
   </div>
 </dialog>
 
@@ -406,31 +407,32 @@
   <div class="head cover k8s">
     <div class="label">MORE</div>
     <h2 id="m-k8s-title">온프레미스 쿠버네티스 웹·DB 배포 및 운영</h2>
-    <div class="meta">수업 종합 실습 · 2026.10 · Kubernetes(kubeadm) · Ingress(TLS) · ConfigMap · Secret · PVC · HPA · MySQL</div>
+    <div class="meta">수업 종합 실습 · 2026.10.26 · Kubernetes(kubeadm) · Ingress(TLS) · ConfigMap · Secret · PVC · HPA · MySQL</div>
     <button class="close" aria-label="닫기">×</button>
   </div>
   <div class="content">
     <h3><span class="n">01</span>프로젝트 소개</h3>
-    <p>웹과 주문 DB로 구성된 쇼핑몰 서비스를 온프레미스 쿠버네티스 클러스터에 배포하고, 배포 후 운영 작업(Day-2)까지 직접 수행한 실습입니다.</p>
-<pre class="code"><span class="dim"># 구성</span>
-[사용자] → Ingress (HTTPS · TLS Secret)
-         → Service web-svc → Deployment web (nginx ×2, HPA 2~5)  ← ConfigMap
-           Service db-svc  → Deployment db  (mysql ×1)           ← ConfigMap · Secret
-                                    ↓
-                             <span class="hl">PVC db-pvc (StorageClass local-path, 동적 생성)</span></pre>
+    <p>사내 쇼핑몰 K-Shop을 온프레미스 쿠버네티스 클러스터에 배포하고, 운영팀 입장에서 DB 백업·복구와 무중단 버전 업데이트 같은 운영 작업(Day-2)까지 수행한 수업 종합 실습입니다.</p>
+<pre class="code"><span class="dim"># 구성 (Namespace: shop)</span>
+[사용자] → https://shop.example.com:30443
+         → Ingress shop-ingress (TLS : shop-tls)
+         → Service web-svc:80   → Deployment web (nginx ×2, HPA 2~5) ← ConfigMap shop-html
+           Service db-svc:3306  → Deployment db  (mysql ×1)          ← ConfigMap db-config · Secret db-secret
+                                                    ↓
+                                     <span class="hl">PVC db-pvc (StorageClass local-path, 동적 생성)</span></pre>
 
     <h3><span class="n">02</span>배경과 목적</h3>
     <dl class="kv">
-      <dt>배경</dt><dd>수업에서 배운 쿠버네티스 오브젝트를 종합해, 실제 서비스처럼 배포하고 운영까지 해 보는 실습이었습니다.</dd>
+      <dt>배경</dt><dd>StorageClass를 이용한 동적 프로비저닝과 PV/PVC를 배운 뒤, 지금까지 배운 쿠버네티스 오브젝트를 종합해 실제 서비스처럼 오픈하고 운영해 보는 실습이었습니다.</dd>
       <dt>목적</dt><dd>① 웹 서버는 무중단 배포와 자동 확장 ② 주문 DB는 Pod가 재시작되어도 데이터 유지 ③ HTTPS로 서비스 공개</dd>
     </dl>
 
     <h3><span class="n">03</span>주요 작업</h3>
     <ol class="steps">
-      <li><b><span>1</span>설정과 비밀 정보 분리</b><p>DB 이름·사용자는 ConfigMap, DB 비밀번호와 TLS 인증서는 Secret으로 분리해 YAML에 평문으로 남기지 않았습니다.</p></li>
-      <li><b><span>2</span>DB 배포 (PVC + Recreate)</b><p>동적 PVC(1Gi, RWO)를 /var/lib/mysql에 연결했습니다. RollingUpdate를 쓰면 새 Pod와 기존 Pod가 같은 데이터 폴더를 동시에 쓰게 되므로 Recreate 전략을 적용했습니다.</p></li>
-      <li><b><span>3</span>웹 배포 (무중단 업데이트 + 자동 확장)</b><p>RollingUpdate(maxSurge 1, maxUnavailable 0)로 기존 Pod를 먼저 내리지 않도록 하고, requests/limits를 지정해 CPU 50% 기준 HPA(2~5)를 적용했습니다.</p></li>
-      <li><b><span>4</span>HTTPS 공개</b><p>자체 서명 인증서로 TLS Secret을 만들고, Ingress에서 도메인을 web-svc로 연결했습니다.</p></li>
+      <li><b><span>1</span>사전 점검</b><p>배포 전에 노드 상태, Ingress Controller, 기본 StorageClass(local-path), metrics-server가 준비되어 있는지 확인했습니다.</p></li>
+      <li><b><span>2</span>설정과 비밀 정보 분리</b><p>DB 이름·사용자와 웹 페이지는 ConfigMap, DB 비밀번호는 Secret으로 분리했습니다. openssl로 자체 서명 인증서를 만들어 TLS Secret으로 등록했습니다.</p></li>
+      <li><b><span>3</span>DB 배포 (PVC + Recreate)</b><p>동적 PVC(1Gi, RWO)를 /var/lib/mysql에 연결했습니다. RollingUpdate를 쓰면 새 Pod와 기존 Pod가 같은 데이터 폴더를 동시에 쓰게 되므로 Recreate 전략을 적용하고, requests/limits를 지정했습니다.</p></li>
+      <li><b><span>4</span>웹 배포 (무중단 업데이트 + 자동 확장)</b><p>RollingUpdate(maxSurge 1, maxUnavailable 0)로 기존 Pod를 먼저 내리지 않도록 하고, change-cause로 배포 이력을 남겼습니다. CPU 50% 기준 HPA(2~5)를 적용하고, Ingress로 shop.example.com을 HTTPS로 공개했습니다.</p></li>
       <li><b><span>5</span>운영 검증 (Day-2)</b><p>DB Pod를 재시작해도 주문 3건이 유지되는지 확인했습니다. mysqldump 백업 후 DROP TABLE로 사고를 재현해 백업으로 복구했고, 0.5초마다 요청을 보내며 nginx 1.27 → 1.28로 업데이트해 200 응답만 나오는 것을 확인했습니다.</p></li>
     </ol>
 
