@@ -390,14 +390,14 @@
 
     <h3><span class="n">03</span>주요 작업</h3>
     <ol class="steps">
-      <li><b><span>1</span>DVWA 배포</b><p>Amazon Linux EC2에 Docker를 설치하고 DVWA 이미지 2종(sagikazarmark/dvwa, vulnerables/web-dvwa)을 각각 80·8080 포트로 배포해 비교했습니다. 보안 레벨을 impossible에서 low로 낮춰 취약한 상태로 만들었습니다.</p></li>
+      <li><b><span>1</span>DVWA 배포</b><p>Amazon Linux EC2에 Docker를 설치하고 DVWA를 컨테이너로 배포한 뒤, 보안 레벨을 impossible에서 low로 낮춰 실습을 진행했습니다.</p></li>
       <li><b><span>2</span>WAF 적용 전 공격</b><p>SQL Injection(' or 1=1 #)으로 전체 계정 정보가, Command Injection(8.8.8.8 &amp;&amp; cat /etc/passwd)으로 서버의 계정 파일이 노출되는 것을 확인했습니다.</p></li>
       <li><b><span>3</span>ALB·Web ACL 구성</b><p>대상 그룹과 ALB를 만들어 DVWA를 연결하고, ALB에 Web ACL을 붙여 SQLi·XSS 규칙을 적용했습니다. 차단 시에는 사용자 정의 Access Denied 페이지로 응답하도록 했습니다.</p></li>
       <li><b><span>4</span>로그 수집·분석</b><p>CloudFormation 템플릿으로 WAF 대시보드를 만들고, WAF 로그를 CloudWatch Logs Insights 쿼리(최근 요청 20건, 요청 상위 IP)로 분석했습니다. 같은 SQL Injection 요청이 애플리케이션에 도달하지 않고 WAF에서 차단된 것을 확인했습니다.</p></li>
     </ol>
 
     <h3><span class="n">04</span>배운 점</h3>
-    <p>WAF 적용 전에는 입력창 한 줄로 계정 정보와 서버 파일이 노출됐지만, Web ACL을 연결한 뒤에는 같은 요청이 애플리케이션에 도달하기 전에 차단됐습니다. 애플리케이션 코드를 고치지 않아도 앞단에서 공격 요청을 걸러낼 수 있다는 것을 확인했습니다.</p>
+    <p>WAF 적용 전에는 입력창 한 줄로 계정 정보와 서버 파일이 노출됐지만, Web ACL을 연결한 뒤에는 같은 요청이 애플리케이션에 도달하기 전에 차단됐습니다. 공격을 막을 수 있는 WAF 규칙을 설정하면 앞단에서 공격 요청을 걸러낼 수 있다는 것을 확인했습니다.</p>
     <p>다만 WAF는 규칙에 맞는 요청만 막기 때문에, 애플리케이션의 입력값 검증도 함께 필요하다는 것을 알게 됐습니다. 또한 CloudWatch 로그로 어떤 IP에서 어떤 요청이 차단됐는지 근거를 남길 수 있었습니다.</p>
   </div>
 </dialog>
