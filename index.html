@@ -434,7 +434,8 @@
       <li><b><span>2</span>설정과 비밀 정보 분리</b><p>ConfigMap과 Secret을 분리하고, openssl로 자체 서명 인증서를 만들어 TLS Secret으로 등록했습니다.</p></li>
       <li><b><span>3</span>DB 배포</b><p>동적 PVC를 연결하고, Recreate 전략과 requests/limits를 지정했습니다.</p></li>
       <li><b><span>4</span>웹 배포</b><p>RollingUpdate로 기존 Pod를 먼저 내리지 않도록 하고, change-cause로 배포 이력을 남겼습니다.</p></li>
-      <li><b><span>5</span>운영 검증</b><p>DB를 재시작한 뒤 데이터가 유지되는지 확인하고, DB를 백업해 둔 뒤 DB 테이블을 실수로 삭제해 보고 복구를 진행하여 대응해 보았습니다. 또한 웹 서버 버전 업데이트를 시도하여 사용자 요청이 실패하지 않는지 확인했습니다.</p></li>
+      <li><b><span>5</span>운영 검증</b><p>DB를 재시작한 뒤 데이터가 유지되는지 확인하고, DB를 백업해 둔 뒤 DB 테이블을 실수로 삭제해 보고 복구를 진행하여 대응해 보았습니다. 또한 웹 서버 버전 업데이트를 시도하여 사용자 요청이 실패하지 않는지 확인했습니다.</p>
+        <figure><img src="assets/img/k8s-zero-downtime.png" alt="nginx 버전 업데이트 중 0.5초마다 요청을 보내 200 응답만 반환된 터미널 화면" loading="lazy"><figcaption>버전 업데이트 중 0.5초 간격 요청 · 모두 200 응답</figcaption></figure></li>
     </ol>
 
     <h3><span class="n">04</span>배운 점</h3>
